@@ -1,0 +1,19 @@
+ul.list {
+  margin-inline-start: 0;
+}
+
+ul.list li {
+  display: flex;
+  align-items: center;
+}
+
+ul.list li::before {
+  content: "👉";
+  font-size: 1.5rem;
+  padding-right: 0.5rem;
+}
+
+.removeIcon {
+  font-size: 1rem;
+  margin-left: 0.5rem;
+}
