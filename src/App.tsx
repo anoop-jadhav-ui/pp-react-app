@@ -9,7 +9,8 @@ function Intro() {
   return (
     <Box display="flex" justifyContent="center">
       <Text fontSize="xl" width="xl" textAlign="center">
-        Collaborate, conquer challenges, and code together seamlessly.
+        This is a pair programming assist tool to collaborate, conquer
+        challenges, and code together seamlessly.
       </Text>
     </Box>
   );
