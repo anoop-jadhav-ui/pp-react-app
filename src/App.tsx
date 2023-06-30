@@ -1,11 +1,9 @@
-import { Box, Container, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import "./App.css";
 import AddUserForm from "./components/AddUserForm/AddUserForm";
 import AddedBuddyList from "./components/AddedBuddyList/AddedBuddyList";
 import Header from "./components/Header/Header";
 import { useFormContext } from "./contexts/formContext";
-import { useEffect } from "react";
-import PairingBoard from "./components/PairingBoard/PairingBoard";
 
 function Intro() {
   return (
@@ -17,7 +15,7 @@ function Intro() {
   );
 }
 function App() {
-  const { nameList, setNameList } = useFormContext();
+  const { nameList } = useFormContext();
 
   // useEffect(() => {
   //   setNameList([
