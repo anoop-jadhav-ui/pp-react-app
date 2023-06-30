@@ -35,7 +35,7 @@ const AddUserForm = () => {
 
   return (
     <form>
-      <Grid templateColumns="4fr 1fr" gap={1} alignItems="flex-end" mt={8}>
+      <Grid templateColumns="4fr 1fr" gap={1} alignItems="flex-end">
         <GridItem>
           <FormControl>
             <FormLabel htmlFor="name">Colleague's Name</FormLabel>
@@ -49,7 +49,12 @@ const AddUserForm = () => {
           </FormControl>
         </GridItem>
         <GridItem>
-          <Button variant="solid" onClick={addTeammate} type="submit">
+          <Button
+            variant="outline"
+            colorScheme="purple"
+            onClick={addTeammate}
+            type="submit"
+          >
             Add Colleague
           </Button>
         </GridItem>
