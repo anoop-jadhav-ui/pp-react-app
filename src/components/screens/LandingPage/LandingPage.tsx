@@ -1,7 +1,8 @@
 import { Grid, GridItem } from "@chakra-ui/react";
+import Footer from "../../atoms/Footer/Footer";
 import Header from "../../atoms/Header/Header";
-import AddUserForm from "../../organisms/AddUserForm/AddUserForm";
 import Intro from "../../atoms/Intro/Intro";
+import AddUserForm from "../../organisms/AddUserForm/AddUserForm";
 import AddedBuddyList from "../../organisms/AddedBuddyList/AddedBuddyList";
 
 const LandingPage = () => {
@@ -19,6 +20,7 @@ const LandingPage = () => {
       <GridItem pt={2}>
         <AddedBuddyList />
       </GridItem>
+      <Footer />
     </Grid>
   );
 };
