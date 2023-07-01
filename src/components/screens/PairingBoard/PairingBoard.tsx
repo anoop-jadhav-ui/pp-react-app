@@ -1,28 +1,119 @@
-import { Box, Card, CardHeader } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  CardHeader,
+  Grid,
+  GridItem,
+} from "@chakra-ui/react";
+import { useState } from "react";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  OnDragEndResponder,
+} from "react-beautiful-dnd";
 import { useFormContext } from "../../../contexts/formContext";
+import { reorder } from "../../../utils/dragAndDropUtils";
 import styles from "./PairingBoard.module.css";
 
 const PairingBoard = () => {
-  const { nameList } = useFormContext();
+  const { nameList, setNameList } = useFormContext();
+  const [selectedList, setSelectedList] = useState<string[]>([]);
+
+  const onDragEnd: OnDragEndResponder = (result) => {
+    if (!result.destination) {
+      return;
+    }
+    const items = reorder<string>(
+      nameList,
+      result.source.index,
+      result.destination.index
+    );
+    setNameList(items);
+  };
+
+  const selectCardForPairing = (clickedName: string) => {
+    setSelectedList((list: string[]) => {
+      if (list.includes(clickedName)) {
+        return list.filter((item) => item !== clickedName);
+      } else {
+        return [...list, clickedName];
+      }
+    });
+  };
 
   return (
-    <Box className={styles.boardWrapper}>
-      <Box padding={4} className={styles.cardContainer} display="flex" gap={2}>
-        {nameList.map((name) => {
-          return (
-            <Card
-              className={styles.card}
-              key={name}
-              backgroundColor="#ffff88"
-              draggable
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Box className={styles.boardWrapper}>
+        <Grid gridTemplateColumns="1fr auto" alignItems="center">
+          <GridItem>
+            <Droppable droppableId="cardDefaultDropArea" direction="horizontal">
+              {(provided) => (
+                <Box
+                  ref={provided.innerRef}
+                  padding={4}
+                  className={styles.cardContainer}
+                  display="flex"
+                  gap={4}
+                  {...provided.droppableProps}
+                >
+                  {nameList.map((name, i) => {
+                    const isCardSelected = selectedList.includes(name);
+                    return (
+                      <Draggable
+                        draggableId={`draggable-${name}`}
+                        index={i}
+                        key={name}
+                      >
+                        {(provided) => (
+                          <Card
+                            ref={provided.innerRef}
+                            className={`${styles.card} ${
+                              isCardSelected ? styles.selected : ""
+                            }`}
+                            key={name}
+                            backgroundColor="#ffff88"
+                            draggable
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            onClick={() => selectCardForPairing(name)}
+                          >
+                            <CardHeader className={styles.cardHeader}>
+                              {name}
+                            </CardHeader>
+                          </Card>
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                  {provided.placeholder}
+                </Box>
+              )}
+            </Droppable>
+          </GridItem>
+          <GridItem>
+            <Button
+              variant="solid"
+              colorScheme="purple"
+              className={styles.pairButton}
             >
-              <CardHeader className={styles.cardHeader}>{name}</CardHeader>
-            </Card>
-          );
-        })}
+              Pair
+            </Button>
+          </GridItem>
+        </Grid>
+
+        <Droppable droppableId="board">
+          {(provided) => (
+            <Box
+              ref={provided.innerRef}
+              className={styles.board}
+              {...provided.droppableProps}
+            ></Box>
+          )}
+        </Droppable>
       </Box>
-      <Box className={styles.board}></Box>
-    </Box>
+    </DragDropContext>
   );
 };
 
