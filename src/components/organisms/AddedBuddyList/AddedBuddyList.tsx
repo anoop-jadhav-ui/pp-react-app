@@ -19,9 +19,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useFormContext } from "../../contexts/formContext";
+import { useFormContext } from "../../../contexts/formContext";
 import styles from "./AddedBuddyList.module.css";
 import { DeleteIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 function DeleteDialog({
   isOpen,
@@ -59,6 +60,7 @@ function DeleteDialog({
 }
 
 function AddedBuddyList() {
+  const navigate = useNavigate();
   const { nameList, setNameList } = useFormContext();
   const deleteDialogMethods = useDisclosure();
   const [deletedItem, setDeletedItem] = useState("");
@@ -117,7 +119,12 @@ function AddedBuddyList() {
         </Grid>
       </CardBody>
       <CardFooter>
-        <Button colorScheme="purple" variant="solid" width="100%">
+        <Button
+          colorScheme="purple"
+          variant="solid"
+          width="100%"
+          onClick={() => navigate("/pairing-board")}
+        >
           Start Pairing
         </Button>
       </CardFooter>

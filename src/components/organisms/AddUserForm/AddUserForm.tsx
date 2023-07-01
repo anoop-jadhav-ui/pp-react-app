@@ -7,7 +7,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { useRef } from "react";
-import { useFormContext } from "../../contexts/formContext";
+import { useFormContext } from "../../../contexts/formContext";
 
 const AddUserForm = () => {
   const { nameList, setNameList } = useFormContext();
@@ -35,7 +35,7 @@ const AddUserForm = () => {
 
   return (
     <form>
-      <Grid templateColumns="4fr 1fr" gap={1} alignItems="flex-end">
+      <Grid templateColumns="4fr 1fr" gap={2} alignItems="flex-end">
         <GridItem>
           <FormControl>
             <FormLabel htmlFor="name">Colleague's Name</FormLabel>

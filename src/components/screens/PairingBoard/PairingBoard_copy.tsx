@@ -1,5 +1,5 @@
 import { Card, CardHeader, Box } from "@chakra-ui/react";
-import { useFormContext } from "../../contexts/formContext";
+import { useFormContext } from "../../../contexts/formContext";
 import styles from "./PairingBoard.module.css";
 
 const PairingBoard = () => {

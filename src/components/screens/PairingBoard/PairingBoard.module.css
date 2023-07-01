@@ -1,0 +1,26 @@
+.boardWrapper {
+  --card-height: 8.75rem;
+  position: relative;
+}
+
+.card {
+  height: var(--card-height);
+  cursor: pointer;
+}
+.card:active {
+  background: yellowgreen;
+}
+.cardHeader {
+  padding: 0 1rem;
+}
+
+.board {
+  border: 8px solid whitesmoke;
+  border-radius: 1rem;
+  height: 600px;
+  width: 100%;
+  position: absolute;
+  top: calc((var(--card-height) - 1rem));
+  left: 0;
+  background-color: white;
+}
