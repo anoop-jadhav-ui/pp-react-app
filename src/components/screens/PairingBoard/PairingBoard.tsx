@@ -1,90 +1,147 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardHeader,
-  Grid,
-  GridItem,
-} from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, Tag } from "@chakra-ui/react";
 import { useState } from "react";
 import {
   DragDropContext,
-  Draggable,
   Droppable,
   OnDragEndResponder,
 } from "react-beautiful-dnd";
-import { useFormContext } from "../../../contexts/formContext";
-import { reorder } from "../../../utils/dragAndDropUtils";
+import { Colleague, useFormContext } from "../../../contexts/formContext";
+import { getListStyle, reorder } from "../../../utils/dragAndDropUtils";
+import DraggableCard from "../../molecules/DraggableCard/DraggableCard";
 import styles from "./PairingBoard.module.css";
 
+interface Pair {
+  id: number;
+  items: Colleague[];
+}
+
+const DroppablePair = ({ pairItem }: { pairItem: Pair; index: number }) => {
+  return (
+    <Droppable
+      droppableId={"pairDropArea-" + pairItem.id.toString()}
+      direction="horizontal"
+    >
+      {(provided, snapshot) => (
+        <Box
+          ref={provided.innerRef}
+          className={styles.pairOnBoard}
+          {...provided.droppableProps}
+          style={getListStyle(snapshot.isDraggingOver)}
+        >
+          <Tag>{pairItem.id}</Tag>
+          {pairItem.items.map((item) => {
+            return (
+              <DraggableCard
+                key={item.id}
+                title={item.name}
+                index={item.id}
+                isSelected={false}
+              />
+            );
+          })}
+          {provided.placeholder}
+        </Box>
+      )}
+    </Droppable>
+  );
+};
+
 const PairingBoard = () => {
-  const { nameList, setNameList } = useFormContext();
-  const [selectedList, setSelectedList] = useState<string[]>([]);
+  const { colleagueList, setColleagueList } = useFormContext();
+  const [selectedList, setSelectedList] = useState<Colleague[]>([]);
+  const [pairList, setPairList] = useState<Pair[]>([]);
 
   const onDragEnd: OnDragEndResponder = (result) => {
     if (!result.destination) {
       return;
     }
-    const items = reorder<string>(
-      nameList,
-      result.source.index,
-      result.destination.index
-    );
-    setNameList(items);
+
+    console.log(result);
+
+    if (result.source.droppableId === "defaultDropArea") {
+      const items = reorder<Colleague>(
+        colleagueList,
+        result.source.index,
+        result.destination.index
+      );
+      setColleagueList(items);
+    }
+    if (
+      result.source.droppableId.includes("pairDropArea") &&
+      result.destination.droppableId.includes("pairDropArea")
+    ) {
+      const items = reorder<Pair>(
+        pairList,
+        result.source.index,
+        result.destination.index
+      );
+      setPairList(items);
+    }
   };
 
   const selectCardForPairing = (clickedName: string) => {
-    setSelectedList((list: string[]) => {
-      if (list.includes(clickedName)) {
-        return list.filter((item) => item !== clickedName);
+    setSelectedList((list: Colleague[]) => {
+      const isAlreadySelected = list.find((item) => item.name === clickedName);
+      if (isAlreadySelected) {
+        return list.filter((item) => item.name !== clickedName);
       } else {
-        return [...list, clickedName];
+        const selectedItem = colleagueList.find(
+          (item) => item.name === clickedName
+        );
+        if (selectedItem) {
+          return [...list, selectedItem];
+        } else {
+          return list;
+        }
       }
     });
   };
+
+  const addPairToBoard = () => {
+    const newPairItem: Pair = {
+      id: pairList.length,
+      items: [...selectedList],
+    };
+    setPairList([...pairList, newPairItem]);
+    setColleagueList((list) => {
+      return list.filter((item) => {
+        return !selectedList.find((ele) => ele.name === item.name);
+      });
+    });
+    setSelectedList([]);
+  };
+
+  console.log(pairList);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Box className={styles.boardWrapper}>
         <Grid gridTemplateColumns="1fr auto" alignItems="center">
           <GridItem>
-            <Droppable droppableId="cardDefaultDropArea" direction="horizontal">
-              {(provided) => (
+            <Droppable droppableId="defaultDropArea" direction="horizontal">
+              {(provided, snapshot) => (
                 <Box
                   ref={provided.innerRef}
                   padding={4}
                   className={styles.cardContainer}
                   display="flex"
                   gap={4}
+                  style={getListStyle(snapshot.isDraggingOver)}
                   {...provided.droppableProps}
                 >
-                  {nameList.map((name, i) => {
-                    const isCardSelected = selectedList.includes(name);
+                  {colleagueList.map((colleague) => {
+                    const isColleagueSelected =
+                      selectedList.findIndex(
+                        (item) => item.name === colleague.name
+                      ) !== -1;
                     return (
-                      <Draggable
-                        draggableId={`draggable-${name}`}
-                        index={i}
-                        key={name}
-                      >
-                        {(provided) => (
-                          <Card
-                            ref={provided.innerRef}
-                            className={`${styles.card} ${
-                              isCardSelected ? styles.selected : ""
-                            }`}
-                            key={name}
-                            backgroundColor="#ffff88"
-                            draggable
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            onClick={() => selectCardForPairing(name)}
-                          >
-                            <CardHeader className={styles.cardHeader}>
-                              {name}
-                            </CardHeader>
-                          </Card>
-                        )}
-                      </Draggable>
+                      <DraggableCard
+                        key={colleague.id}
+                        title={colleague.name}
+                        index={colleague.id}
+                        selectCard={selectCardForPairing}
+                        isSelected={isColleagueSelected}
+                      />
                     );
                   })}
                   {provided.placeholder}
@@ -97,21 +154,19 @@ const PairingBoard = () => {
               variant="solid"
               colorScheme="purple"
               className={styles.pairButton}
+              onClick={addPairToBoard}
             >
               Pair
             </Button>
           </GridItem>
         </Grid>
-
-        <Droppable droppableId="board">
-          {(provided) => (
-            <Box
-              ref={provided.innerRef}
-              className={styles.board}
-              {...provided.droppableProps}
-            ></Box>
-          )}
-        </Droppable>
+        <Box className={styles.board}>
+          {pairList.map((pair) => {
+            return (
+              <DroppablePair key={pair.id} pairItem={pair} index={pair.id} />
+            );
+          })}
+        </Box>
       </Box>
     </DragDropContext>
   );

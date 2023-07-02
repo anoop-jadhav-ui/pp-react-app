@@ -61,13 +61,15 @@ function DeleteDialog({
 
 function AddedBuddyList() {
   const navigate = useNavigate();
-  const { nameList, setNameList } = useFormContext();
+  const { colleagueList, setColleagueList } = useFormContext();
   const deleteDialogMethods = useDisclosure();
   const [deletedItem, setDeletedItem] = useState("");
 
   const removeItem = () => {
-    if (nameList.includes(deletedItem)) {
-      setNameList((list) => list.filter((ele) => ele !== deletedItem));
+    if (colleagueList.find((item) => item.name === deletedItem)) {
+      setColleagueList((list) =>
+        list.filter((ele) => ele.name !== deletedItem)
+      );
     }
     deleteDialogMethods.onClose();
   };
@@ -85,22 +87,22 @@ function AddedBuddyList() {
             Updated Colleague Roster
           </Heading>
           <Tag size="md" colorScheme="purple" ml="2">
-            {nameList.length}
+            {colleagueList.length}
           </Tag>
         </Box>
       </CardHeader>
       <CardBody py={1}>
         <Grid className="list">
           <UnorderedList className={styles.list} listStyleType="none" p="2">
-            {nameList.map((name) => {
+            {colleagueList.map((colleague) => {
               return (
-                <ListItem key={name}>
-                  <Text>{name}</Text>
+                <ListItem key={colleague.name}>
+                  <Text>{colleague.name}</Text>
                   <Button
                     variant="ghost"
                     colorScheme="red"
                     className={styles.removeIcon}
-                    onClick={() => openDeleteConfirmationModal(name)}
+                    onClick={() => openDeleteConfirmationModal(colleague.name)}
                     p={0.25}
                     title="delete item"
                   >

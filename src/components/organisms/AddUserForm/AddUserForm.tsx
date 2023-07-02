@@ -7,15 +7,18 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { useRef } from "react";
-import { useFormContext } from "../../../contexts/formContext";
+import { Colleague, useFormContext } from "../../../contexts/formContext";
 
 const AddUserForm = () => {
-  const { nameList, setNameList } = useFormContext();
+  const { colleagueList, setColleagueList } = useFormContext();
   const nameInput = useRef<HTMLInputElement>(null);
 
   const validateInputs = () => {
     const inputValue = nameInput.current?.value;
-    if (inputValue && nameList.includes(inputValue)) {
+    const isAlreadyPresent = colleagueList.find(
+      (item) => item.name === inputValue
+    );
+    if (inputValue && isAlreadyPresent) {
       nameInput.current?.setCustomValidity("Name already present.");
     } else {
       nameInput.current?.setCustomValidity("");
@@ -26,7 +29,11 @@ const AddUserForm = () => {
   const addTeammate = (event: React.MouseEvent<HTMLButtonElement>) => {
     const isValid = validateInputs();
     if (isValid) {
-      setNameList([...nameList, nameInput.current?.value ?? ""]);
+      const newColleague: Colleague = {
+        id: colleagueList.length,
+        name: nameInput.current?.value ?? "",
+      };
+      setColleagueList([...colleagueList, newColleague]);
       event.preventDefault();
       nameInput.current!.value = "";
     }

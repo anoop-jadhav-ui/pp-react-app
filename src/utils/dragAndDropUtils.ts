@@ -25,4 +25,8 @@ const getItemStyle = (
   ...draggableStyle,
 });
 
-export { reorder, getItemStyle };
+const getListStyle = (isDraggingOver: boolean) => ({
+  background: isDraggingOver ? "lightblue" : "",
+});
+
+export { reorder, getItemStyle, getListStyle };

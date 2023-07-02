@@ -6,15 +6,30 @@ import PairingBoard from "./components/screens/PairingBoard/PairingBoard";
 import { useFormContext } from "./contexts/formContext";
 
 function App() {
-  const { setNameList } = useFormContext();
+  const { setColleagueList } = useFormContext();
 
   useEffect(() => {
-    setNameList([
-      "Anoop Jadhav",
-      "Harshada Raut",
-      "Akshay Jadhav",
-      "Rishab Baid",
-      "Srujan Keskar",
+    setColleagueList([
+      {
+        id: 0,
+        name: "Anoop Jadhav",
+      },
+      {
+        id: 1,
+        name: "Akshay Jadhav",
+      },
+      {
+        id: 2,
+        name: "Harshada Raut",
+      },
+      {
+        id: 3,
+        name: "Rishab Baid",
+      },
+      {
+        id: 4,
+        name: "Srujan Keskar",
+      },
     ]);
   }, []);
 

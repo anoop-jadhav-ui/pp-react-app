@@ -1,0 +1,17 @@
+.card {
+  height: var(--card-height);
+  width: var(--card-height);
+  text-align: center;
+  cursor: pointer;
+}
+.card.selected {
+  position: relative;
+  border: 1px solid tomato;
+  top: -1rem;
+}
+.card:active {
+  background: yellowgreen;
+}
+.cardHeader {
+  padding: 0 1rem;
+}

@@ -1,8 +1,13 @@
 import React, { useContext, useState } from "react";
 
+export interface Colleague {
+  id: number;
+  name: string;
+}
+
 type FormContextType = {
-  nameList: string[];
-  setNameList: React.Dispatch<React.SetStateAction<string[]>>;
+  colleagueList: Colleague[];
+  setColleagueList: React.Dispatch<React.SetStateAction<Colleague[]>>;
 };
 
 export const FormContext = React.createContext<FormContextType>(
@@ -14,12 +19,12 @@ export const FormContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [nameList, setNameList] = useState<string[]>([]);
+  const [colleagueList, setColleagueList] = useState<Colleague[]>([]);
   return (
     <FormContext.Provider
       value={{
-        nameList,
-        setNameList,
+        colleagueList,
+        setColleagueList,
       }}
     >
       {children}
