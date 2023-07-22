@@ -5,20 +5,21 @@ import {
   Droppable,
   OnDragEndResponder,
 } from "react-beautiful-dnd";
-import { Colleague, useFormContext } from "../../../contexts/formContext";
 import { getListStyle, reorder } from "../../../utils/dragAndDropUtils";
 import DraggableCard from "../../molecules/DraggableCard/DraggableCard";
 import styles from "./PairingBoard.module.css";
+import { TeamMember } from "../../../store/teamMembersStore";
+import { usePairingStore } from "../../../store/pairingStore";
 
 interface Pair {
   id: number;
-  items: Colleague[];
+  items: TeamMember[];
 }
 
 const DroppablePair = ({ pairItem }: { pairItem: Pair; index: number }) => {
   return (
     <Droppable
-      droppableId={"pairDropArea-" + pairItem.id.toString()}
+      droppableId={`pairDropArea-${pairItem.id.toString()}`}
       direction="horizontal"
     >
       {(provided, snapshot) => (
@@ -47,8 +48,8 @@ const DroppablePair = ({ pairItem }: { pairItem: Pair; index: number }) => {
 };
 
 const PairingBoard = () => {
-  const { colleagueList, setColleagueList } = useFormContext();
-  const [selectedList, setSelectedList] = useState<Colleague[]>([]);
+  const { teamMemberPool, setTeamMemberPoolList } = usePairingStore();
+  const [selectedList, setSelectedList] = useState<TeamMember[]>([]);
   const [pairList, setPairList] = useState<Pair[]>([]);
 
   const onDragEnd: OnDragEndResponder = (result) => {
@@ -59,12 +60,12 @@ const PairingBoard = () => {
     console.log(result);
 
     if (result.source.droppableId === "defaultDropArea") {
-      const items = reorder<Colleague>(
-        colleagueList,
+      const items = reorder<TeamMember>(
+        teamMemberPool,
         result.source.index,
         result.destination.index
       );
-      setColleagueList(items);
+      setTeamMemberPoolList(items);
     }
     if (
       result.source.droppableId.includes("pairDropArea") &&
@@ -80,12 +81,12 @@ const PairingBoard = () => {
   };
 
   const selectCardForPairing = (clickedName: string) => {
-    setSelectedList((list: Colleague[]) => {
+    setSelectedList((list: TeamMember[]) => {
       const isAlreadySelected = list.find((item) => item.name === clickedName);
       if (isAlreadySelected) {
         return list.filter((item) => item.name !== clickedName);
       } else {
-        const selectedItem = colleagueList.find(
+        const selectedItem = teamMemberPool.find(
           (item) => item.name === clickedName
         );
         if (selectedItem) {
@@ -103,11 +104,11 @@ const PairingBoard = () => {
       items: [...selectedList],
     };
     setPairList([...pairList, newPairItem]);
-    setColleagueList((list) => {
-      return list.filter((item) => {
+    setTeamMemberPoolList(
+      teamMemberPool.filter((item) => {
         return !selectedList.find((ele) => ele.name === item.name);
-      });
-    });
+      })
+    );
     setSelectedList([]);
   };
 
@@ -129,7 +130,7 @@ const PairingBoard = () => {
                   style={getListStyle(snapshot.isDraggingOver)}
                   {...provided.droppableProps}
                 >
-                  {colleagueList.map((colleague) => {
+                  {teamMemberPool.map((colleague) => {
                     const isColleagueSelected =
                       selectedList.findIndex(
                         (item) => item.name === colleague.name

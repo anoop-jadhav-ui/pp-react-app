@@ -1,3 +1,4 @@
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -19,10 +20,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useFormContext } from "../../../contexts/formContext";
-import styles from "./AddedBuddyList.module.css";
-import { DeleteIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import { useTeamMemberStore } from "../../../store/teamMembersStore";
+import styles from "./AddedBuddyList.module.css";
+import { observer } from "mobx-react-lite";
+import { usePairingStore } from "../../../store/pairingStore";
 
 function DeleteDialog({
   isOpen,
@@ -59,16 +61,19 @@ function DeleteDialog({
   );
 }
 
-function AddedBuddyList() {
+const AddedBuddyList = observer(() => {
   const navigate = useNavigate();
-  const { colleagueList, setColleagueList } = useFormContext();
+  const { teamMemberList, setTeamMemberList } = useTeamMemberStore();
+  const { setTeamMemberPoolList } = usePairingStore();
+
   const deleteDialogMethods = useDisclosure();
+
   const [deletedItem, setDeletedItem] = useState("");
 
   const removeItem = () => {
-    if (colleagueList.find((item) => item.name === deletedItem)) {
-      setColleagueList((list) =>
-        list.filter((ele) => ele.name !== deletedItem)
+    if (teamMemberList.find((item) => item.name === deletedItem)) {
+      setTeamMemberList(
+        teamMemberList.filter((ele) => ele.name !== deletedItem)
       );
     }
     deleteDialogMethods.onClose();
@@ -79,6 +84,11 @@ function AddedBuddyList() {
     deleteDialogMethods.onOpen();
   };
 
+  const startPairingHandler = () => {
+    setTeamMemberPoolList(teamMemberList);
+    navigate("/pairing-board");
+  };
+
   return (
     <Card mt={4} variant="outline">
       <CardHeader pb={0}>
@@ -87,14 +97,14 @@ function AddedBuddyList() {
             Updated Colleague Roster
           </Heading>
           <Tag size="md" colorScheme="purple" ml="2">
-            {colleagueList.length}
+            {teamMemberList.length}
           </Tag>
         </Box>
       </CardHeader>
       <CardBody py={1}>
         <Grid className="list">
           <UnorderedList className={styles.list} listStyleType="none" p="2">
-            {colleagueList.map((colleague) => {
+            {teamMemberList.map((colleague) => {
               return (
                 <ListItem key={colleague.name}>
                   <Text>{colleague.name}</Text>
@@ -125,13 +135,13 @@ function AddedBuddyList() {
           colorScheme="purple"
           variant="solid"
           width="100%"
-          onClick={() => navigate("/pairing-board")}
+          onClick={startPairingHandler}
         >
           Start Pairing
         </Button>
       </CardFooter>
     </Card>
   );
-}
+});
 
 export default AddedBuddyList;

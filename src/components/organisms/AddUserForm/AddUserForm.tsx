@@ -6,16 +6,20 @@ import {
   GridItem,
   Input,
 } from "@chakra-ui/react";
+import { observer } from "mobx-react-lite";
 import { useRef } from "react";
-import { Colleague, useFormContext } from "../../../contexts/formContext";
+import {
+  TeamMember,
+  useTeamMemberStore,
+} from "../../../store/teamMembersStore";
 
-const AddUserForm = () => {
-  const { colleagueList, setColleagueList } = useFormContext();
+const AddUserForm = observer(() => {
+  const { teamMemberList, setTeamMemberList } = useTeamMemberStore();
   const nameInput = useRef<HTMLInputElement>(null);
 
   const validateInputs = () => {
     const inputValue = nameInput.current?.value;
-    const isAlreadyPresent = colleagueList.find(
+    const isAlreadyPresent = teamMemberList.find(
       (item) => item.name === inputValue
     );
     if (inputValue && isAlreadyPresent) {
@@ -29,12 +33,13 @@ const AddUserForm = () => {
   const addTeammate = (event: React.MouseEvent<HTMLButtonElement>) => {
     const isValid = validateInputs();
     if (isValid) {
-      const newColleague: Colleague = {
-        id: colleagueList.length,
+      const newColleague: TeamMember = {
+        id: teamMemberList.length,
         name: nameInput.current?.value ?? "",
       };
-      setColleagueList([...colleagueList, newColleague]);
+      setTeamMemberList([...teamMemberList, newColleague]);
       event.preventDefault();
+      // rome-ignore lint/style/noNonNullAssertion: <Ignored>
       nameInput.current!.value = "";
     }
     nameInput.current?.reportValidity();
@@ -68,6 +73,6 @@ const AddUserForm = () => {
       </Grid>
     </form>
   );
-};
+});
 
 export default AddUserForm;
