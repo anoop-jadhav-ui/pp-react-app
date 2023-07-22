@@ -39,8 +39,9 @@ const AddUserForm = observer(() => {
       };
       setTeamMemberList([...teamMemberList, newColleague]);
       event.preventDefault();
-      // rome-ignore lint/style/noNonNullAssertion: <Ignored>
-      nameInput.current!.value = "";
+      if (nameInput.current) {
+        nameInput.current.value = "";
+      }
     }
     nameInput.current?.reportValidity();
   };
