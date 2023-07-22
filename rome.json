@@ -1,12 +1,39 @@
 {
-  "$schema": "https://docs.rome.tools/schemas/12.1.3/schema.json",
-  "organizeImports": {
-    "enabled": false
-  },
+  "$schema": "./node_modules/rome/configuration_schema.json",
   "linter": {
     "enabled": true,
+    "ignore": ["*.spec.tsx", "*.spec.ts"],
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "a11y": {
+        "useKeyWithMouseEvents": "off",
+        "useKeyWithClickEvents": "off"
+      }
     }
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": true,
+    "indentStyle": "space",
+    "indentSize": 2,
+    "lineWidth": 80
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "quoteProperties": "asNeeded",
+      "trailingComma": "es5",
+      "semicolons": "always"
+    }
+  },
+  "files": {
+    "ignore": [
+      "node_modules",
+      "dist",
+      "__mocks__",
+      ".husky",
+      ".idea",
+      "src/archived"
+    ]
   }
 }
