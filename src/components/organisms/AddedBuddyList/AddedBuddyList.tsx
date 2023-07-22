@@ -1,30 +1,30 @@
-import { DeleteIcon } from "@chakra-ui/icons";
+import DeleteIcon from "@mui/icons-material/Delete";
+import PersonIcon from "@mui/icons-material/Person";
 import {
   Box,
   Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
-  Heading,
+  IconButton,
+  List,
   ListItem,
-  Modal,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Tag,
-  Text,
-  UnorderedList,
-  useDisclosure,
-} from "@chakra-ui/react";
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTeamMemberStore } from "../../../store/teamMembersStore";
-import styles from "./AddedBuddyList.module.css";
-import { observer } from "mobx-react-lite";
 import { usePairingStore } from "../../../store/pairingStore";
+import { useTeamMemberStore } from "../../../store/teamMembersStore";
 
 function DeleteDialog({
   isOpen,
@@ -38,26 +38,20 @@ function DeleteDialog({
   deletedItem: string;
 }) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>
-          Are you sure you want to delete{" "}
-          <Text display="inline" color="purple.600">
-            {deletedItem}
-          </Text>
-          ?
-        </ModalHeader>
-        <ModalFooter gap={2}>
-          <Button variant="ghost" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button colorScheme="red" mr={3} onClick={onConfirm}>
-            Confirm
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    <Dialog open={isOpen} onClose={onClose}>
+      <DialogTitle>Are you sure?</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          {`Are you sure you want to delete ${deletedItem} ?`}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onConfirm} autoFocus>
+          Confirm
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
@@ -66,7 +60,9 @@ const AddedBuddyList = observer(() => {
   const { teamMemberList, setTeamMemberList } = useTeamMemberStore();
   const { setTeamMemberPoolList } = usePairingStore();
 
-  const deleteDialogMethods = useDisclosure();
+  const [isOpen, setOpen] = useState(false);
+  const closeDialog = () => setOpen(false);
+  const openDialog = () => setOpen(true);
 
   const [deletedItem, setDeletedItem] = useState("");
 
@@ -76,12 +72,12 @@ const AddedBuddyList = observer(() => {
         teamMemberList.filter((ele) => ele.name !== deletedItem)
       );
     }
-    deleteDialogMethods.onClose();
+    closeDialog();
   };
 
   const openDeleteConfirmationModal = (itemToBeDeleted: string) => {
     setDeletedItem(itemToBeDeleted);
-    deleteDialogMethods.onOpen();
+    openDialog();
   };
 
   const startPairingHandler = () => {
@@ -90,57 +86,58 @@ const AddedBuddyList = observer(() => {
   };
 
   return (
-    <Card mt={4} variant="outline">
-      <CardHeader pb={0}>
-        <Box display="flex" alignItems="center">
-          <Heading as="h3" size="md">
-            Updated Colleague Roster
-          </Heading>
-          <Tag size="md" colorScheme="purple" ml="2">
-            {teamMemberList.length}
-          </Tag>
-        </Box>
-      </CardHeader>
-      <CardBody py={1}>
+    <>
+      <Stack spacing={2} direction="row" alignItems="center" pb={2}>
+        <Typography variant="h5" component="h3">
+          Added Colleague List
+        </Typography>
+        <Chip
+          label={teamMemberList.length}
+          color="info"
+          variant="outlined"
+          size="small"
+          sx={{ width: 32 }}
+        />
+      </Stack>
+      <Paper variant="outlined">
         <Grid className="list">
-          <UnorderedList className={styles.list} listStyleType="none" p="2">
+          <List>
             {teamMemberList.map((colleague) => {
               return (
-                <ListItem key={colleague.name}>
-                  <Text>{colleague.name}</Text>
-                  <Button
-                    variant="ghost"
-                    colorScheme="red"
-                    className={styles.removeIcon}
-                    onClick={() => openDeleteConfirmationModal(colleague.name)}
-                    p={0.25}
-                    title="delete item"
-                  >
-                    <DeleteIcon />
-                  </Button>
+                <ListItem key={colleague.name} sx={{ p: 0 }}>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <PersonIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={colleague.name} />
+                    <IconButton
+                      aria-label="delete"
+                      size="medium"
+                      onClick={() =>
+                        openDeleteConfirmationModal(colleague.name)
+                      }
+                    >
+                      <DeleteIcon fontSize="inherit" color="error" />
+                    </IconButton>
+                  </ListItemButton>
                 </ListItem>
               );
             })}
-          </UnorderedList>
+          </List>
           <DeleteDialog
-            onClose={deleteDialogMethods.onClose}
-            isOpen={deleteDialogMethods.isOpen}
+            onClose={closeDialog}
+            isOpen={isOpen}
             onConfirm={removeItem}
             deletedItem={deletedItem}
           />
         </Grid>
-      </CardBody>
-      <CardFooter>
-        <Button
-          colorScheme="purple"
-          variant="solid"
-          width="100%"
-          onClick={startPairingHandler}
-        >
+      </Paper>
+      <Box textAlign="center" component="div" sx={{ mt: 2 }}>
+        <Button variant="contained" onClick={startPairingHandler}>
           Start Pairing
         </Button>
-      </CardFooter>
-    </Card>
+      </Box>
+    </>
   );
 });
 

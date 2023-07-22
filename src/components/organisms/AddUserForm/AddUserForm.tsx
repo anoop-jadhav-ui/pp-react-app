@@ -1,78 +1,70 @@
-import {
-  Button,
-  FormControl,
-  FormLabel,
-  Grid,
-  GridItem,
-  Input,
-} from "@chakra-ui/react";
+import { Button, FormControl, Grid } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { useRef } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import {
   TeamMember,
   useTeamMemberStore,
 } from "../../../store/teamMembersStore";
+import ControlledTextField from "../../molecules/ControlledTextField/ControlledTextField";
+
+interface AddTeammateForm {
+  colleagueName: string;
+}
+
+const defaultValues: AddTeammateForm = {
+  colleagueName: "",
+};
 
 const AddUserForm = observer(() => {
   const { teamMemberList, setTeamMemberList } = useTeamMemberStore();
-  const nameInput = useRef<HTMLInputElement>(null);
 
-  const validateInputs = () => {
-    const inputValue = nameInput.current?.value;
-    const isAlreadyPresent = teamMemberList.find(
-      (item) => item.name === inputValue
-    );
-    if (inputValue && isAlreadyPresent) {
-      nameInput.current?.setCustomValidity("Name already present.");
-    } else {
-      nameInput.current?.setCustomValidity("");
-    }
-    return nameInput.current?.checkValidity();
+  const methods = useForm({
+    defaultValues,
+  });
+
+  const { handleSubmit } = methods;
+
+  const onFormSubmit: SubmitHandler<AddTeammateForm> = ({ colleagueName }) => {
+    const newColleague: TeamMember = {
+      id: teamMemberList.length,
+      name: colleagueName,
+    };
+    setTeamMemberList([...teamMemberList, newColleague]);
   };
 
-  const addTeammate = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const isValid = validateInputs();
-    if (isValid) {
-      const newColleague: TeamMember = {
-        id: teamMemberList.length,
-        name: nameInput.current?.value ?? "",
-      };
-      setTeamMemberList([...teamMemberList, newColleague]);
-      event.preventDefault();
-      if (nameInput.current) {
-        nameInput.current.value = "";
-      }
-    }
-    nameInput.current?.reportValidity();
+  const isExistingValue = async (name: string) => {
+    return teamMemberList.find((member) => member.name === name)
+      ? "Name already added in the list"
+      : true;
   };
 
   return (
-    <form>
-      <Grid templateColumns="4fr 1fr" gap={2} alignItems="flex-end">
-        <GridItem>
-          <FormControl>
-            <FormLabel htmlFor="name">Colleague's Name</FormLabel>
-            <Input
-              type="text"
-              id="name"
-              required
-              ref={nameInput}
-              placeholder="Enter name"
-            />
-          </FormControl>
-        </GridItem>
-        <GridItem>
-          <Button
-            variant="outline"
-            colorScheme="purple"
-            onClick={addTeammate}
-            type="submit"
-          >
-            Add Colleague
-          </Button>
-        </GridItem>
-      </Grid>
-    </form>
+    <FormProvider {...methods}>
+      <form noValidate onSubmit={handleSubmit(onFormSubmit)}>
+        <Grid container spacing={2}>
+          <Grid item xs={8}>
+            <FormControl fullWidth>
+              <ControlledTextField
+                name="colleagueName"
+                type="text"
+                required
+                placeholder="Enter name"
+                label="Colleague's Name"
+                rules={{
+                  required: "Please enter your colleague's name.",
+                  validate: isExistingValue,
+                }}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <Button variant="contained" type="submit" size="large">
+              Add Colleague
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </FormProvider>
   );
 });
 

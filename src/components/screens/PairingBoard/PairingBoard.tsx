@@ -1,15 +1,17 @@
-import { Box, Button, Grid, GridItem, Tag } from "@chakra-ui/react";
+import { Tag } from "@mui/icons-material";
+import { Box, Button, Grid } from "@mui/material";
+import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {
   DragDropContext,
   Droppable,
   OnDragEndResponder,
 } from "react-beautiful-dnd";
+import { usePairingStore } from "../../../store/pairingStore";
+import { TeamMember } from "../../../store/teamMembersStore";
 import { getListStyle, reorder } from "../../../utils/dragAndDropUtils";
 import DraggableCard from "../../molecules/DraggableCard/DraggableCard";
 import styles from "./PairingBoard.module.css";
-import { TeamMember } from "../../../store/teamMembersStore";
-import { usePairingStore } from "../../../store/pairingStore";
 
 interface Pair {
   id: number;
@@ -47,7 +49,7 @@ const DroppablePair = ({ pairItem }: { pairItem: Pair; index: number }) => {
   );
 };
 
-const PairingBoard = () => {
+const PairingBoard = observer(() => {
   const { teamMemberPool, setTeamMemberPoolList } = usePairingStore();
   const [selectedList, setSelectedList] = useState<TeamMember[]>([]);
   const [pairList, setPairList] = useState<Pair[]>([]);
@@ -99,36 +101,39 @@ const PairingBoard = () => {
   };
 
   const addPairToBoard = () => {
-    const newPairItem: Pair = {
-      id: pairList.length,
-      items: [...selectedList],
-    };
-    setPairList([...pairList, newPairItem]);
-    setTeamMemberPoolList(
-      teamMemberPool.filter((item) => {
-        return !selectedList.find((ele) => ele.name === item.name);
-      })
-    );
-    setSelectedList([]);
+    if (selectedList.length > 0) {
+      const newPairItem: Pair = {
+        id: pairList.length,
+        items: [...selectedList],
+      };
+      setPairList([...pairList, newPairItem]);
+      setTeamMemberPoolList(
+        teamMemberPool.filter((item) => {
+          return !selectedList.find((ele) => ele.name === item.name);
+        })
+      );
+      setSelectedList([]);
+    }
   };
 
+  console.log(teamMemberPool);
   console.log(pairList);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Box className={styles.boardWrapper}>
-        <Grid gridTemplateColumns="1fr auto" alignItems="center">
-          <GridItem>
+        <Grid container alignItems="center" spacing={2}>
+          <Grid item>
             <Droppable droppableId="defaultDropArea" direction="horizontal">
               {(provided, snapshot) => (
                 <Box
                   ref={provided.innerRef}
                   padding={4}
                   className={styles.cardContainer}
-                  display="flex"
                   gap={4}
                   style={getListStyle(snapshot.isDraggingOver)}
                   {...provided.droppableProps}
+                  component="div"
                 >
                   {teamMemberPool.map((colleague) => {
                     const isColleagueSelected =
@@ -149,17 +154,17 @@ const PairingBoard = () => {
                 </Box>
               )}
             </Droppable>
-          </GridItem>
-          <GridItem>
+          </Grid>
+          <Grid item>
             <Button
-              variant="solid"
-              colorScheme="purple"
+              variant="contained"
               className={styles.pairButton}
               onClick={addPairToBoard}
+              disabled={selectedList.length === 0}
             >
-              Pair
+              Add Pair
             </Button>
-          </GridItem>
+          </Grid>
         </Grid>
         <Box className={styles.board}>
           {pairList.map((pair) => {
@@ -171,6 +176,6 @@ const PairingBoard = () => {
       </Box>
     </DragDropContext>
   );
-};
+});
 
 export default PairingBoard;

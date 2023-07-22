@@ -1,13 +1,11 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Typography } from "@mui/material";
 
 function Intro() {
   return (
-    <Box display="flex" justifyContent="center">
-      <Text fontSize="xl" width="xl" textAlign="center">
-        This is a pair programming assist tool to collaborate, conquer
-        challenges, and code together seamlessly.
-      </Text>
-    </Box>
+    <Typography variant="body1" textAlign="center">
+      This is a pair programming assist tool to collaborate, conquer challenges,
+      and code together seamlessly.
+    </Typography>
   );
 }
 

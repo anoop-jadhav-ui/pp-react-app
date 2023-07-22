@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import React, { useState } from "react";
+import { mockTeamMembers } from "../data/mockData";
 
 export interface TeamMember {
   id: number;
@@ -7,7 +8,7 @@ export interface TeamMember {
 }
 
 class PairingStore {
-  teamMemberPool: TeamMember[] = [];
+  teamMemberPool: TeamMember[] = mockTeamMembers;
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }

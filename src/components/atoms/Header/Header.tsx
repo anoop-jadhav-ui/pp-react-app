@@ -1,11 +1,11 @@
-import { Heading } from "@chakra-ui/react";
+import { Typography } from "@mui/material";
 
 function Header() {
   return (
-    <Heading textAlign="center">
+    <Typography variant="h3" component="h1" textAlign="center">
       <span className="logo">👨‍🤝‍👨</span>
-      <span> CodeBuddy </span>
-    </Heading>
+      <span> PairingAssist </span>
+    </Typography>
   );
 }
 

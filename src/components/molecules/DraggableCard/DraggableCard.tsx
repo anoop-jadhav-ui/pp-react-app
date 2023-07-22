@@ -1,6 +1,6 @@
-import { Card, CardHeader } from "@chakra-ui/react";
 import { Draggable } from "react-beautiful-dnd";
 import styles from "./DraggableCard.module.css";
+import { Box, Typography } from "@mui/material";
 
 interface CardProps {
   index: number;
@@ -12,17 +12,22 @@ const DraggableCard = ({ isSelected, index, selectCard, title }: CardProps) => {
   return (
     <Draggable draggableId={`draggable-${index}`} index={index}>
       {(provided) => (
-        <Card
+        <Box
+          component="div"
           ref={provided.innerRef}
           className={`${styles.card} ${isSelected ? styles.selected : ""}`}
-          backgroundColor="#ffff88"
           draggable
+          onClick={() => selectCard?.(title)}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          onClick={() => selectCard?.(title)}
+          style={{
+            backgroundColor: "#ffff88",
+          }}
         >
-          <CardHeader className={styles.cardHeader}>{title}</CardHeader>
-        </Card>
+          <Typography variant="subtitle2" className={styles.cardHeader}>
+            {title}
+          </Typography>
+        </Box>
       )}
     </Draggable>
   );
