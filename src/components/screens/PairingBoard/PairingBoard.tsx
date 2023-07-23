@@ -1,5 +1,5 @@
 import { Tag } from "@mui/icons-material";
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Grid, Stack } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {
@@ -7,16 +7,12 @@ import {
   Droppable,
   OnDragEndResponder,
 } from "react-beautiful-dnd";
-import { usePairingStore } from "../../../store/pairingStore";
+import { Pair, usePairingStore } from "../../../store/pairingStore";
 import { TeamMember } from "../../../store/teamMembersStore";
 import { getListStyle, reorder } from "../../../utils/dragAndDropUtils";
 import DraggableCard from "../../molecules/DraggableCard/DraggableCard";
 import styles from "./PairingBoard.module.css";
-
-interface Pair {
-  id: number;
-  items: TeamMember[];
-}
+import { generateRandomId, getRandomPair } from "../../../utils/commonUtils";
 
 const DroppablePair = ({ pairItem }: { pairItem: Pair; index: number }) => {
   return (
@@ -50,40 +46,54 @@ const DroppablePair = ({ pairItem }: { pairItem: Pair; index: number }) => {
 };
 
 const PairingBoard = observer(() => {
-  const { teamMemberPool, setTeamMemberPoolList } = usePairingStore();
-  const [selectedList, setSelectedList] = useState<TeamMember[]>([]);
-  const [pairList, setPairList] = useState<Pair[]>([]);
+  const {
+    teamMemberPool,
+    setTeamMemberPoolList,
+    pairList,
+    setPairList,
+    clearPairingBoard,
+  } = usePairingStore();
+  const [selectedTeamMemberss, setSelectedTeamMembers] = useState<TeamMember[]>(
+    []
+  );
 
   const onDragEnd: OnDragEndResponder = (result) => {
     if (!result.destination) {
       return;
     }
 
+    const source = result.source;
+    const target = result.destination;
+
+    const sourceId = source.droppableId;
+    const targetId = target.droppableId;
+
     console.log(result);
 
-    if (result.source.droppableId === "defaultDropArea") {
-      const items = reorder<TeamMember>(
-        teamMemberPool,
-        result.source.index,
-        result.destination.index
-      );
-      setTeamMemberPoolList(items);
-    }
-    if (
-      result.source.droppableId.includes("pairDropArea") &&
-      result.destination.droppableId.includes("pairDropArea")
-    ) {
-      const items = reorder<Pair>(
-        pairList,
-        result.source.index,
-        result.destination.index
-      );
-      setPairList(items);
+    if (source) {
+      if (sourceId === "defaultDropArea") {
+        const items = reorder<TeamMember>(
+          teamMemberPool,
+          result.source.index,
+          result.destination.index
+        );
+        setTeamMemberPoolList(items);
+      } else if (
+        sourceId.includes("pairDropArea") &&
+        targetId.includes("pairDropArea")
+      ) {
+        const items = reorder<Pair>(
+          pairList,
+          result.source.index,
+          result.destination.index
+        );
+        setPairList(items);
+      }
     }
   };
 
   const selectCardForPairing = (clickedName: string) => {
-    setSelectedList((list: TeamMember[]) => {
+    setSelectedTeamMembers((list: TeamMember[]) => {
       const isAlreadySelected = list.find((item) => item.name === clickedName);
       if (isAlreadySelected) {
         return list.filter((item) => item.name !== clickedName);
@@ -101,19 +111,45 @@ const PairingBoard = observer(() => {
   };
 
   const addPairToBoard = () => {
-    if (selectedList.length > 0) {
+    if (selectedTeamMemberss.length > 0) {
       const newPairItem: Pair = {
-        id: pairList.length,
-        items: [...selectedList],
+        id: generateRandomId(),
+        items: [...selectedTeamMemberss],
       };
       setPairList([...pairList, newPairItem]);
       setTeamMemberPoolList(
         teamMemberPool.filter((item) => {
-          return !selectedList.find((ele) => ele.name === item.name);
+          return !selectedTeamMemberss.find((ele) => ele.name === item.name);
         })
       );
-      setSelectedList([]);
+      setSelectedTeamMembers([]);
     }
+  };
+
+  const addRandomPairsToBoard = () => {
+    let tempItems = [...teamMemberPool];
+    let tempPairs = [...pairList];
+
+    const maxPairLimit = 2;
+    let currentPairLimit = maxPairLimit;
+
+    while (tempItems.length > 0) {
+      if (tempItems.length < maxPairLimit) {
+        currentPairLimit = tempItems.length;
+      }
+      const result = getRandomPair<TeamMember>(tempItems, currentPairLimit);
+      const newPairItem: Pair = {
+        id: generateRandomId(),
+        items: result,
+      };
+      tempPairs = [...tempPairs, newPairItem];
+      for (let i = 0; i < currentPairLimit; i++) {
+        tempItems = tempItems.filter((item) => item.id !== result[i].id);
+      }
+    }
+
+    setTeamMemberPoolList(tempItems);
+    setPairList(tempPairs);
   };
 
   console.log(teamMemberPool);
@@ -137,7 +173,7 @@ const PairingBoard = observer(() => {
                 >
                   {teamMemberPool.map((colleague) => {
                     const isColleagueSelected =
-                      selectedList.findIndex(
+                      selectedTeamMemberss.findIndex(
                         (item) => item.name === colleague.name
                       ) !== -1;
                     return (
@@ -156,14 +192,29 @@ const PairingBoard = observer(() => {
             </Droppable>
           </Grid>
           <Grid item>
-            <Button
-              variant="contained"
-              className={styles.pairButton}
-              onClick={addPairToBoard}
-              disabled={selectedList.length === 0}
-            >
-              Add Pair
-            </Button>
+            <Stack spacing={1}>
+              <Button
+                variant="contained"
+                onClick={addPairToBoard}
+                disabled={selectedTeamMemberss.length === 0}
+              >
+                Add Pair
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={addRandomPairsToBoard}
+                disabled={teamMemberPool.length === 0}
+              >
+                Pair Randomly
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={clearPairingBoard}
+              >
+                Clear Board
+              </Button>
+            </Stack>
           </Grid>
         </Grid>
         <Box className={styles.board}>

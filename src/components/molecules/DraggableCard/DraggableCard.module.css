@@ -3,6 +3,7 @@
   width: var(--card-height);
   text-align: center;
   cursor: pointer;
+  background: #ffff88;
 }
 .card.selected {
   position: relative;

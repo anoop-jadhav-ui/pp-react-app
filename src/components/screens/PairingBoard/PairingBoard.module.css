@@ -13,9 +13,10 @@
   border-radius: 1rem;
   height: 600px;
   width: max(100%, 940px);
-  position: absolute;
+  /* position: absolute;
   top: calc((var(--card-height) - 1rem));
-  left: 0;
+  left: 0; */
+  /* top: 0; */
   background-color: white;
 }
 

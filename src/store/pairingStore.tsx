@@ -7,14 +7,36 @@ export interface TeamMember {
   name: string;
 }
 
+export interface Pair {
+  id: number;
+  items: TeamMember[];
+}
+
 class PairingStore {
   teamMemberPool: TeamMember[] = mockTeamMembers;
+  pairList: Pair[] = [];
+  selectedTeamMembers: TeamMember[] = [];
+
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
   setTeamMemberPoolList(updatedList: TeamMember[]) {
     this.teamMemberPool = updatedList;
+  }
+
+  setSelectedTeamMembers(updatedList: TeamMember[]) {
+    this.teamMemberPool = updatedList;
+  }
+
+  setPairList(updatedPairList: Pair[]) {
+    this.pairList = updatedPairList;
+  }
+
+  clearPairingBoard() {
+    this.pairList = [];
+    this.selectedTeamMembers = [];
+    this.teamMemberPool = mockTeamMembers;
   }
 }
 
