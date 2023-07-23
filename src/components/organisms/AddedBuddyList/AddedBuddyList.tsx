@@ -96,7 +96,7 @@ const AddedBuddyList = observer(() => {
           color="info"
           variant="outlined"
           size="small"
-          sx={{ width: 32 }}
+          sx={{ width: 44 }}
         />
       </Stack>
       <Paper variant="outlined">

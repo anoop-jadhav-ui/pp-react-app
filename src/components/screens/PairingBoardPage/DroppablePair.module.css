@@ -4,7 +4,9 @@
   position: relative;
   padding: 1rem;
 
-  border: 2px solid tomato;
+  border: 2px solid darkkhaki;
+  border-radius: 1em;
+
   min-width: calc(2 * var(--card-height) + 3rem);
-  min-height: calc(var(--card-height) + 2rem);
+  min-height: calc(var(--card-height) + 3rem);
 }

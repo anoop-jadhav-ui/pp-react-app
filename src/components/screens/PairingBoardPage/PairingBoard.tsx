@@ -15,7 +15,7 @@ import {
   useTeamMemberStore,
 } from "../../../store/teamMembersStore";
 import { generateRandomId, getRandomPair } from "../../../utils/commonUtils";
-import { getListStyle, reorder } from "../../../utils/dragAndDropUtils";
+import { getListStyle } from "../../../utils/dragAndDropUtils";
 import DraggableCard from "./DraggableCard";
 import DroppablePair from "./DroppablePair";
 import styles from "./PairingBoard.module.css";
@@ -44,17 +44,16 @@ const PairingBoard = observer(() => {
     const sourceId = source.droppableId;
     const targetId = target.droppableId;
 
+    const sourcePairId = Number(sourceId.split("-")[1]);
+    const targetPairId = Number(targetId.split("-")[1]);
+
     const draggedTeamMemberId = Number(result.draggableId.split("-")[1]);
     const draggedTeamMember = teamMemberList.find(
       (member) => member.id === draggedTeamMemberId
     );
 
-    console.log(JSON.parse(JSON.stringify(pairList)));
-    console.log(result);
-
     if (source) {
       if (sourceId.includes("pairDropArea") && targetId === "defaultDropArea") {
-        const sourcePairId = Number(sourceId.split("-")[1]);
         const updatedPairList = pairList.map((pair) => {
           if (pair.id === sourcePairId) {
             const updatedItems = pair.items.filter(
@@ -71,24 +70,46 @@ const PairingBoard = observer(() => {
         if (draggedTeamMember) {
           setTeamMemberPoolList([...teamMemberPool, draggedTeamMember]);
         }
-      } else if (sourceId === "defaultDropArea") {
-        const items = reorder<TeamMember>(
-          teamMemberPool,
-          result.source.index,
-          result.destination.index
+      } else if (
+        sourceId === "defaultDropArea" &&
+        targetId.includes("pairDropArea")
+      ) {
+        const tempPairList: Pair[] = pairList.map((pair) => {
+          if (pair.id === targetPairId) {
+            return {
+              ...pair,
+              items: [...pair.items, draggedTeamMember],
+            } as Pair;
+          }
+          return pair;
+        });
+        setTeamMemberPoolList(
+          teamMemberPool.filter((member) => member.id !== draggedTeamMemberId)
         );
-        setTeamMemberPoolList(items);
+        setPairList(tempPairList);
       } else if (
         sourceId.includes("pairDropArea") &&
         targetId.includes("pairDropArea") &&
         sourceId !== targetId
       ) {
-        const items = reorder<Pair>(
-          pairList,
-          result.source.index,
-          result.destination.index
-        );
-        setPairList(items);
+        const tempPairList: Pair[] = pairList.map((pair) => {
+          if (pair.id === sourcePairId) {
+            return {
+              ...pair,
+              items: pair.items.filter(
+                (item) => item.id !== draggedTeamMemberId
+              ),
+            } as Pair;
+          } else if (pair.id === targetPairId) {
+            return {
+              ...pair,
+              items: [...pair.items, draggedTeamMember],
+            } as Pair;
+          }
+          return pair;
+        });
+
+        setPairList(tempPairList);
       }
     }
   };
