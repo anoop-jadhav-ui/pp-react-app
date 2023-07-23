@@ -80,7 +80,8 @@ const PairingBoard = observer(() => {
         setTeamMemberPoolList(items);
       } else if (
         sourceId.includes("pairDropArea") &&
-        targetId.includes("pairDropArea")
+        targetId.includes("pairDropArea") &&
+        sourceId !== targetId
       ) {
         const items = reorder<Pair>(
           pairList,
@@ -152,9 +153,6 @@ const PairingBoard = observer(() => {
     setPairList(tempPairs);
   };
 
-  console.log(teamMemberPool);
-  console.log(pairList);
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Container maxWidth="lg" className={styles.boardWrapper}>
@@ -220,7 +218,7 @@ const PairingBoard = observer(() => {
             </Stack>
           </Grid>
         </Grid>
-        <Grid container className={styles.board} justifyContent="space-between">
+        <Grid container className={styles.board} justifyContent="space-evenly">
           {pairList.map((pair) => {
             return (
               <Grid item>
