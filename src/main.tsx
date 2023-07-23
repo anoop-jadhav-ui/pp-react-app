@@ -18,9 +18,7 @@ const theme = createTheme({
   components: {
     MuiButton: {
       styleOverrides: {
-        root: {
-          padding: "0.8125rem 1.5rem",
-        },
+        root: {},
       },
     },
   },

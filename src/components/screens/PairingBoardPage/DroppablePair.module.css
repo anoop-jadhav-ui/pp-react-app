@@ -1,0 +1,10 @@
+.pairOnBoard {
+  display: flex;
+  gap: 1rem;
+  position: relative;
+  padding: 1rem;
+
+  border: 2px solid tomato;
+  min-width: calc(2 * var(--card-height) + 3rem);
+  min-height: calc(var(--card-height) + 2rem);
+}

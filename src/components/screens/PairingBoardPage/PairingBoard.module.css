@@ -1,0 +1,31 @@
+.boardWrapper {
+  --card-height: 8.75rem;
+  position: relative;
+}
+
+.pairButton {
+  position: relative;
+  top: -1.5rem;
+}
+
+.cardContainer {
+  display: flex;
+
+  min-width: 160px;
+  min-height: 160px;
+  margin-bottom: 1rem;
+
+  border: 8px solid whitesmoke;
+  border-radius: 1rem;
+
+  overflow-y: scroll;
+}
+
+.board {
+  border: 8px solid whitesmoke;
+  border-radius: 1rem;
+  min-height: 600px;
+
+  gap: 2rem;
+  background-color: white;
+}

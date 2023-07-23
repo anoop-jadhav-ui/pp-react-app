@@ -13,7 +13,7 @@ export interface Pair {
 }
 
 class PairingStore {
-  teamMemberPool: TeamMember[] = mockTeamMembers;
+  teamMemberPool: TeamMember[] = [];
   pairList: Pair[] = [];
   selectedTeamMembers: TeamMember[] = [];
 

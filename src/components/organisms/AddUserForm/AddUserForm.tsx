@@ -58,7 +58,14 @@ const AddUserForm = observer(() => {
             </FormControl>
           </Grid>
           <Grid item>
-            <Button variant="contained" type="submit" size="large">
+            <Button
+              variant="contained"
+              type="submit"
+              size="large"
+              sx={{
+                padding: "0.8125rem 1.5rem",
+              }}
+            >
               Add Colleague
             </Button>
           </Grid>
