@@ -1,11 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import React, { useState } from "react";
 import { mockTeamMembers } from "../data/mockData";
-
-export interface TeamMember {
-  id: number;
-  name: string;
-}
+import { TeamMember } from "./teamMembersStore";
 
 export interface Pair {
   id: number;

@@ -5,6 +5,7 @@ import { mockTeamMembers } from "../data/mockData";
 export interface TeamMember {
   id: number;
   name: string;
+  color?: string;
 }
 
 class TeamMemberStore {

@@ -205,6 +205,7 @@ const PairingBoard = observer(() => {
                         index={colleague.id}
                         selectCard={selectCardForPairing}
                         isSelected={isColleagueSelected}
+                        color={colleague.color}
                       />
                     );
                   })}

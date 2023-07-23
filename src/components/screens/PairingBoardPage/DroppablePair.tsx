@@ -32,6 +32,7 @@ const DroppablePair = ({ pairItem }: { pairItem: Pair; index: number }) => {
                         title={item.name}
                         index={item.id}
                         isSelected={false}
+                        color={item.color}
                       />
                     </Grid>
                   );

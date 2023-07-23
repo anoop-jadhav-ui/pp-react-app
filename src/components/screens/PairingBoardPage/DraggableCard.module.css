@@ -2,13 +2,17 @@
   min-height: var(--card-height);
   min-width: var(--card-height);
 
+  display: flex;
   text-align: center;
+  justify-content: center;
+  align-items: center;
+
   cursor: pointer;
   background: khaki;
 }
 .card.selected {
   position: relative;
-  border: 2px solid darkkhaki;
+  border: 2px solid tomato;
   top: -0.5rem;
 }
 .card:active {
