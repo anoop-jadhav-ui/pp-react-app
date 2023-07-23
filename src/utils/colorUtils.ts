@@ -175,4 +175,68 @@ const cssColors = [
   "YellowGreen",
 ];
 
-export { colorsWithRatioAbove4, cssColors };
+/**
+ * Convert a CSS color name to its hexadecimal representation.
+ * @param colorName - The CSS color name (e.g., "red", "blue", "green", etc.).
+ * @returns The hexadecimal representation (e.g., "#RRGGBB") or null if the color name is invalid.
+ */
+function cssColorNameToHex(colorName: string): string {
+  const element = document.createElement("div");
+  element.style.color = colorName;
+  document.body.appendChild(element);
+  const computedColor = getComputedStyle(element).color;
+  document.body.removeChild(element);
+
+  // The computed color is in the format "rgb(r, g, b)".
+  // Extract the RGB values and convert to hexadecimal.
+  const rgbValues = computedColor.match(/\d+/g);
+  if (!rgbValues || rgbValues.length !== 3) {
+    console.error("Invalid color name:", colorName);
+    return "";
+  }
+
+  const r = parseInt(rgbValues[0], 10).toString(16).padStart(2, "0");
+  const g = parseInt(rgbValues[1], 10).toString(16).padStart(2, "0");
+  const b = parseInt(rgbValues[2], 10).toString(16).padStart(2, "0");
+
+  return `#${r}${g}${b}`;
+}
+
+/**
+ * Calculate the contrast ratio between two colors in hexadecimal format.
+ * @param color1 - The first color in hexadecimal format (#RRGGBB).
+ * @param color2 - The second color in hexadecimal format (#RRGGBB).
+ * @returns The contrast ratio between the two colors.
+ */
+function calculateContrastRatioHex(color1: string, color2: string): number {
+  const getLuminance = (color: string): number => {
+    const hexColor = color.replace("#", "");
+    const r = parseInt(hexColor.substring(0, 2), 16) / 255;
+    const g = parseInt(hexColor.substring(2, 4), 16) / 255;
+    const b = parseInt(hexColor.substring(4, 6), 16) / 255;
+    const gammaCorrection = (c: number) =>
+      c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    return (
+      0.2126 * gammaCorrection(r) +
+      0.7152 * gammaCorrection(g) +
+      0.0722 * gammaCorrection(b)
+    );
+  };
+
+  const luminance1 = getLuminance(color1);
+  const luminance2 = getLuminance(color2);
+
+  const lighterColor = Math.max(luminance1, luminance2);
+  const darkerColor = Math.min(luminance1, luminance2);
+
+  const contrastRatio = (lighterColor + 0.05) / (darkerColor + 0.05);
+
+  return Number(contrastRatio.toFixed(2));
+}
+
+export {
+  colorsWithRatioAbove4,
+  cssColors,
+  cssColorNameToHex,
+  calculateContrastRatioHex,
+};

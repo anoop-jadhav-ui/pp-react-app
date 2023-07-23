@@ -12,7 +12,7 @@
 }
 .card.selected {
   position: relative;
-  border: 2px solid tomato;
+  border: 2px solid darkslategray;
   top: -0.5rem;
 }
 .card:active {

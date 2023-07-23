@@ -19,14 +19,14 @@ const getItemStyle = (
   margin: `0 ${grid}px 0 0`,
 
   // change background colour if dragging
-  background: isDragging ? "lightgreen" : "grey",
+  background: isDragging ? "whitesmoke" : "grey",
 
   // styles we need to apply on draggables
   ...draggableStyle,
 });
 
 const getListStyle = (isDraggingOver: boolean) => ({
-  background: isDraggingOver ? "lightblue" : "",
+  background: isDraggingOver ? "whitesmoke" : "",
 });
 
 export { reorder, getItemStyle, getListStyle };

@@ -1,6 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import { Draggable } from "react-beautiful-dnd";
 import styles from "./DraggableCard.module.css";
+import {
+  calculateContrastRatioHex,
+  cssColorNameToHex,
+} from "../../../utils/colorUtils";
 
 interface CardProps {
   index: number;
@@ -17,6 +21,16 @@ const DraggableCard = ({
   title,
   color = "khaki",
 }: CardProps) => {
+  const ccrRatio = calculateContrastRatioHex(
+    cssColorNameToHex("black"),
+    cssColorNameToHex(color)
+  );
+
+  let textColor = "black";
+  if (ccrRatio < 7) {
+    textColor = "white";
+  }
+
   return (
     <Draggable draggableId={`draggable-${index}`} index={index}>
       {(provided) => (
@@ -30,6 +44,7 @@ const DraggableCard = ({
             style: {
               ...provided.draggableProps.style,
               background: color,
+              color: textColor,
             },
           }}
           {...provided.dragHandleProps}
