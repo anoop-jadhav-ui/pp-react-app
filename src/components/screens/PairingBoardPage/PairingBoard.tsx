@@ -86,7 +86,7 @@ const PairingBoard = observer(() => {
         setTeamMemberPoolList(
           teamMemberPool.filter((member) => member.id !== draggedTeamMemberId)
         );
-        setPairList(tempPairList);
+        setPairList(cleanUpPairList(tempPairList));
       } else if (
         sourceId.includes("pairDropArea") &&
         targetId.includes("pairDropArea") &&
@@ -108,10 +108,13 @@ const PairingBoard = observer(() => {
           }
           return pair;
         });
-
-        setPairList(tempPairList);
+        setPairList(cleanUpPairList(tempPairList));
       }
     }
+  };
+
+  const cleanUpPairList = (list: Pair[]) => {
+    return list.filter((pair) => pair.items.length > 0);
   };
 
   const selectCardForPairing = (clickedName: string) => {

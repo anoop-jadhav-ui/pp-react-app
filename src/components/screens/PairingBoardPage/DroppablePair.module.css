@@ -8,5 +8,6 @@
   border-radius: 1em;
 
   min-width: calc(2 * var(--card-height) + 3rem);
-  min-height: calc(var(--card-height) + 3rem);
+  min-height: calc(var(--card-height) + 5rem);
+  max-height: calc(var(--card-height) + 5rem);
 }

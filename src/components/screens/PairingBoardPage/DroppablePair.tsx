@@ -36,8 +36,8 @@ const DroppablePair = ({ pairItem }: { pairItem: Pair; index: number }) => {
                     </Grid>
                   );
                 })}
+                {provided.placeholder}
               </Grid>
-              {provided.placeholder}
             </Grid>
           </Grid>
         </Box>
