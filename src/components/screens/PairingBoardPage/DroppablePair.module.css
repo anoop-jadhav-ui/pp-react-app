@@ -4,7 +4,8 @@
   position: relative;
   padding: 1rem;
 
-  border: 2px solid var(--secondary);
+  /* border: 2px solid gainsboro; */
+  background-color: whitesmoke;
   border-radius: 1em;
 
   min-width: calc(2 * var(--card-height) + 3rem);

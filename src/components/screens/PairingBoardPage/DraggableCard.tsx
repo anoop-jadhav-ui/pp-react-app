@@ -12,7 +12,7 @@ interface CardProps {
   selectCard?: (name: string) => void;
   title: string;
   color?: string;
-  toolTipText: string;
+  toolTipText?: string;
 }
 
 const DraggableCard = ({

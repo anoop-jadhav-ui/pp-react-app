@@ -21,7 +21,7 @@
 }
 
 .board {
-  border: 8px solid whitesmoke;
+  border: 8px solid var(--secondary);
   border-radius: 1rem;
   min-height: 600px;
 
