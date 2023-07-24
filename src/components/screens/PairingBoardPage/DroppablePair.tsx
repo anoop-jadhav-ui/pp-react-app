@@ -7,7 +7,15 @@ import { getListStyle } from "../../../utils/dragAndDropUtils";
 import DraggableCard from "./DraggableCard";
 import styles from "./DroppablePair.module.css";
 
-const DroppablePair = ({ pairItem }: { pairItem: Pair; index: number }) => {
+interface DroppablePairType {
+  pairItem: Pair;
+  index: number;
+  removeDroppablePair: (id: number) => void;
+}
+const DroppablePair = ({
+  pairItem,
+  removeDroppablePair,
+}: DroppablePairType) => {
   return (
     <Droppable
       droppableId={`pairDropArea-${pairItem.id.toString()}`}
@@ -28,7 +36,7 @@ const DroppablePair = ({ pairItem }: { pairItem: Pair; index: number }) => {
               alignItems="center"
             >
               <Typography variant="subtitle2">{`Pair ${pairItem.id}`}</Typography>
-              <IconButton>
+              <IconButton onClick={() => removeDroppablePair(pairItem.id)}>
                 <CloseIcon />
               </IconButton>
             </Stack>

@@ -182,6 +182,15 @@ const PairingBoard = observer(() => {
     setSelectedTeamMembers([]);
   };
 
+  const removeDroppablePair = (id: number) => {
+    const removedPairItem = pairList.find((item) => item.id === id);
+    if (removedPairItem) {
+      const updatedPairList = pairList.filter((pair) => pair.id !== id);
+      setTeamMemberPoolList([...teamMemberPool, ...removedPairItem.items]);
+      setPairList(cleanUpPairList(updatedPairList));
+    }
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Container maxWidth="lg" className={styles.boardWrapper}>
@@ -264,6 +273,7 @@ const PairingBoard = observer(() => {
                       key={pair.id}
                       pairItem={pair}
                       index={pair.id}
+                      removeDroppablePair={removeDroppablePair}
                     />
                   </Grid>
                 );
