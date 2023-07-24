@@ -6,12 +6,12 @@ import { useTeamMemberStore } from "../../../store/teamMembersStore";
 import PairingBoard from "./PairingBoard";
 
 const PairingBoardPage = observer(() => {
-  const { setTeamMemberPoolList, clearPairingBoard } = usePairingStore();
+  const pairingStore = usePairingStore();
   const { teamMemberList } = useTeamMemberStore();
 
   useEffect(() => {
-    clearPairingBoard();
-    setTeamMemberPoolList(teamMemberList);
+    pairingStore.clearPairingBoard();
+    pairingStore.setTeamMemberPoolList(teamMemberList);
   }, []);
 
   return (

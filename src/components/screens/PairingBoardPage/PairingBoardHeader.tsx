@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import CloseIcon from "@mui/icons-material/Close";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import { Button, Grid } from "@mui/material";
 import { observer } from "mobx-react-lite";
@@ -25,7 +25,7 @@ const PairingBoardHeader = observer((props: PairingBoardHeader) => {
               variant="outlined"
               color="error"
               onClick={props.clearPairingBoard}
-              startIcon={<HighlightOffIcon />}
+              startIcon={<CloseIcon />}
               disabled={pairList.length === 0}
               size="large"
             >

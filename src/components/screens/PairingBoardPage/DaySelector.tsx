@@ -21,6 +21,7 @@ const DaySelector = () => {
           InputLabelProps={{
             shrink: true,
           }}
+          size="small"
           value={currentDate}
         />
       </Grid>
