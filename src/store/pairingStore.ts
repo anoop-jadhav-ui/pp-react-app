@@ -1,9 +1,8 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import React, { useState } from "react";
 import { DropResult } from "react-beautiful-dnd";
+import { mockTeamMembers } from "../data/mockData";
 import { generateRandomId, getRandomPair } from "../utils/commonUtils";
 import { TeamMember } from "./teamMembersStore";
-import { mockTeamMembers } from "../data/mockData";
 
 export interface Pair {
   id: number;
@@ -208,22 +207,4 @@ class PairingStore {
   };
 }
 
-const PairingStoreContext = React.createContext({} as PairingStore);
-
-const PairingStoreProvider = ({ children }: { children: React.ReactNode }) => {
-  const [pairingStore] = useState(new PairingStore());
-  return (
-    <PairingStoreContext.Provider value={pairingStore}>
-      {children}
-    </PairingStoreContext.Provider>
-  );
-};
-
-const usePairingStore = () => React.useContext(PairingStoreContext);
-
-export {
-  PairingStore,
-  PairingStoreContext,
-  PairingStoreProvider,
-  usePairingStore,
-};
+export default PairingStore;

@@ -1,10 +1,8 @@
 import { Button, FormControl, Grid } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import {
-  TeamMember,
-  useTeamMemberStore,
-} from "../../../store/teamMembersStore";
+import { useTeamMemberStore } from "../../../contexts/TeamMembersStoreProvider";
+import { TeamMember } from "../../../store/teamMembersStore";
 import ControlledTextField from "../../molecules/ControlledTextField/ControlledTextField";
 
 interface AddTeammateForm {

@@ -1,11 +1,11 @@
 import { Container, Grid } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { useTeamMemberStore } from "../../../store/teamMembersStore";
 import Footer from "../../atoms/Footer/Footer";
 import Header from "../../atoms/Header/Header";
 import Intro from "../../atoms/Intro/Intro";
 import AddUserForm from "../../organisms/AddUserForm/AddUserForm";
 import AddedBuddyList from "../../organisms/AddedBuddyList/AddedBuddyList";
+import { useTeamMemberStore } from "../../../contexts/TeamMembersStoreProvider";
 
 const LandingPage = observer(() => {
   const { teamMemberList } = useTeamMemberStore();

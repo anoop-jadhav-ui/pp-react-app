@@ -17,15 +17,16 @@ import {
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePairingStore } from "../../../store/pairingStore";
-import { useTeamMemberStore } from "../../../store/teamMembersStore";
+import { usePairingStore } from "../../../contexts/PairingStoreProvider";
+import { useTeamMemberStore } from "../../../contexts/TeamMembersStoreProvider";
 import DeleteDialog from "../../atoms/DeleteDialog/DeleteDialog";
 
 const AddedBuddyList = observer(() => {
   const navigate = useNavigate();
-  const { teamMemberList, setTeamMemberList, clearTeamMemberList } =
-    useTeamMemberStore();
-  const { setTeamMemberPoolList } = usePairingStore();
+  const teamMemberStore = useTeamMemberStore();
+  const { teamMemberList } = teamMemberStore;
+
+  const pairingStore = usePairingStore();
 
   const [isOpen, setOpen] = useState(false);
   const closeDialog = () => setOpen(false);
@@ -35,7 +36,7 @@ const AddedBuddyList = observer(() => {
 
   const removeItem = () => {
     if (teamMemberList.find((item) => item.name === deletedItem)) {
-      setTeamMemberList(
+      teamMemberStore.setTeamMemberList(
         teamMemberList.filter((ele) => ele.name !== deletedItem)
       );
     }
@@ -48,7 +49,7 @@ const AddedBuddyList = observer(() => {
   };
 
   const startPairingHandler = () => {
-    setTeamMemberPoolList(teamMemberList);
+    pairingStore.setTeamMemberPoolList(teamMemberList);
     navigate("/pairing-board");
   };
 
@@ -85,7 +86,11 @@ const AddedBuddyList = observer(() => {
           </Grid>
         </Grid>
         <Grid item>
-          <Button variant="text" color="error" onClick={clearTeamMemberList}>
+          <Button
+            variant="text"
+            color="error"
+            onClick={teamMemberStore.clearTeamMemberList}
+          >
             Clear All
           </Button>
         </Grid>

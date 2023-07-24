@@ -1,8 +1,8 @@
 import { Container } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { usePairingStore } from "../../../store/pairingStore";
-import { useTeamMemberStore } from "../../../store/teamMembersStore";
+import { usePairingStore } from "../../../contexts/PairingStoreProvider";
+import { useTeamMemberStore } from "../../../contexts/TeamMembersStoreProvider";
 import PairingBoard from "./PairingBoard";
 
 const PairingBoardPage = observer(() => {

@@ -1,5 +1,5 @@
-import { PairingStoreProvider } from "../store/pairingStore";
-import { TeamMemberStoreProvider } from "../store/teamMembersStore";
+import { PairingStoreProvider } from "./PairingStoreProvider";
+import { TeamMemberStoreProvider } from "./TeamMembersStoreProvider";
 
 const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   return (

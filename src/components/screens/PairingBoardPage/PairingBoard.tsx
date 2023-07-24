@@ -5,13 +5,14 @@ import {
   Droppable,
   OnDragEndResponder,
 } from "react-beautiful-dnd";
-import { usePairingStore } from "../../../store/pairingStore";
-import { useTeamMemberStore } from "../../../store/teamMembersStore";
+
 import { getListStyle } from "../../../utils/dragAndDropUtils";
 import DraggableCard from "./DraggableCard";
 import DroppablePair from "./DroppablePair";
 import styles from "./PairingBoard.module.css";
 import PairingBoardHeader from "./PairingBoardHeader";
+import { usePairingStore } from "../../../contexts/PairingStoreProvider";
+import { useTeamMemberStore } from "../../../contexts/TeamMembersStoreProvider";
 
 const PairingBoard = observer(() => {
   const pairingStore = usePairingStore();

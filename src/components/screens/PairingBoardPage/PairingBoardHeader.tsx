@@ -3,7 +3,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import { Button, Grid } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { usePairingStore } from "../../../store/pairingStore";
+import { usePairingStore } from "../../../contexts/PairingStoreProvider";
 import DaySelector from "./DaySelector";
 
 interface PairingBoardHeader {
