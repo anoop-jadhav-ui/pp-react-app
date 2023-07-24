@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useTeamMemberStore } from "../../../contexts/TeamMembersStoreProvider";
 import { TeamMember } from "../../../store/teamMembersStore";
+import { getRandomColor } from "../../../utils/colorUtils";
 import ControlledTextField from "../../molecules/ControlledTextField/ControlledTextField";
 
 interface AddTeammateForm {
@@ -26,6 +27,7 @@ const AddUserForm = observer(() => {
     const newColleague: TeamMember = {
       id: teamMemberList.length,
       name: colleagueName,
+      color: getRandomColor(),
     };
     setTeamMemberList([...teamMemberList, newColleague]);
   };

@@ -103,7 +103,11 @@ const AddedBuddyList = observer(() => {
                 <ListItem key={colleague.name} sx={{ p: 0 }}>
                   <ListItemButton>
                     <ListItemIcon>
-                      <PersonIcon />
+                      <PersonIcon
+                        sx={{
+                          fill: colleague.color,
+                        }}
+                      />
                     </ListItemIcon>
                     <ListItemText primary={colleague.name} />
                     <IconButton
