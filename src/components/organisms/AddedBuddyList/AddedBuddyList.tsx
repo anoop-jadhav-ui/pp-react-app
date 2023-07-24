@@ -1,4 +1,4 @@
-import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
 import PersonIcon from "@mui/icons-material/Person";
 import {
   Box,
@@ -117,7 +117,7 @@ const AddedBuddyList = observer(() => {
                         openDeleteConfirmationModal(colleague.name)
                       }
                     >
-                      <DeleteIcon fontSize="inherit" color="error" />
+                      <CloseIcon fontSize="inherit" color="error" />
                     </IconButton>
                   </ListItemButton>
                 </ListItem>

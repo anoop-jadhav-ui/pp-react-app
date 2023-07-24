@@ -27,8 +27,10 @@ function DeleteDialog({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onConfirm} autoFocus variant="contained">
+        <Button onClick={onClose} color="error">
+          Cancel
+        </Button>
+        <Button onClick={onConfirm} autoFocus variant="contained" color="error">
           Confirm
         </Button>
       </DialogActions>
