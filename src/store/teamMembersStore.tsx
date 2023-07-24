@@ -17,6 +17,10 @@ class TeamMemberStore {
   setTeamMemberList(updatedList: TeamMember[]) {
     this.teamMemberList = updatedList;
   }
+
+  clearTeamMemberList() {
+    this.teamMemberList = [];
+  }
 }
 
 const TeamMemberStoreContext = React.createContext({} as TeamMemberStore);

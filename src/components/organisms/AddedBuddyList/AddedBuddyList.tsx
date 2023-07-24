@@ -4,11 +4,6 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Grid,
   IconButton,
   List,
@@ -17,7 +12,6 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
-  Stack,
   Typography,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
@@ -25,39 +19,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePairingStore } from "../../../store/pairingStore";
 import { useTeamMemberStore } from "../../../store/teamMembersStore";
-
-function DeleteDialog({
-  isOpen,
-  onConfirm,
-  onClose,
-  deletedItem,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  deletedItem: string;
-}) {
-  return (
-    <Dialog open={isOpen} onClose={onClose}>
-      <DialogTitle>Are you sure?</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          {`Are you sure you want to delete ${deletedItem} ?`}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onConfirm} autoFocus>
-          Confirm
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
+import DeleteDialog from "../../atoms/DeleteDialog/DeleteDialog";
 
 const AddedBuddyList = observer(() => {
   const navigate = useNavigate();
-  const { teamMemberList, setTeamMemberList } = useTeamMemberStore();
+  const { teamMemberList, setTeamMemberList, clearTeamMemberList } =
+    useTeamMemberStore();
   const { setTeamMemberPoolList } = usePairingStore();
 
   const [isOpen, setOpen] = useState(false);
@@ -87,18 +54,42 @@ const AddedBuddyList = observer(() => {
 
   return (
     <>
-      <Stack spacing={2} direction="row" alignItems="center" pb={2}>
-        <Typography variant="h5" component="h3">
-          Added Colleague List
-        </Typography>
-        <Chip
-          label={teamMemberList.length}
-          color="info"
-          variant="outlined"
-          size="small"
-          sx={{ width: 44 }}
-        />
-      </Stack>
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        pb={2}
+        justifyContent="space-between"
+      >
+        <Grid item>
+          <Grid container alignItems="center">
+            <Grid item>
+              <Typography
+                variant="h6"
+                component="h3"
+                fontWeight="bold"
+                sx={{ mr: 1.5 }}
+              >
+                Added Colleagues List
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Chip
+                label={teamMemberList.length}
+                color="secondary"
+                variant="filled"
+                size="small"
+                sx={{ fontWeight: "bold" }}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Button variant="text" color="error" onClick={clearTeamMemberList}>
+            Clear All
+          </Button>
+        </Grid>
+      </Grid>
       <Paper variant="outlined">
         <Grid className="list">
           <List>
@@ -132,8 +123,12 @@ const AddedBuddyList = observer(() => {
           />
         </Grid>
       </Paper>
-      <Box textAlign="center" component="div" sx={{ mt: 2 }}>
-        <Button variant="contained" onClick={startPairingHandler}>
+      <Box textAlign="center" component="div" sx={{ mt: 4 }}>
+        <Button
+          variant="contained"
+          onClick={startPairingHandler}
+          sx={{ padding: "0.8125rem 2rem" }}
+        >
           Start Pairing
         </Button>
       </Box>

@@ -59,12 +59,10 @@ const AddUserForm = observer(() => {
           </Grid>
           <Grid item>
             <Button
-              variant="contained"
+              variant="outlined"
               type="submit"
               size="large"
-              sx={{
-                padding: "0.8125rem 1.5rem",
-              }}
+              sx={{ padding: "0.8125rem 1.5rem" }}
             >
               Add Colleague
             </Button>
