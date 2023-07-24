@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {
@@ -200,7 +200,14 @@ const PairingBoard = observer(() => {
               spacing={2}
               justifyContent="space-between"
             >
-              <Grid item xs={12}>
+              <Grid item xs={12} position="relative">
+                <Typography
+                  variant="subtitle2"
+                  fontSize={18}
+                  className={styles.teamMemberTitle}
+                >
+                  Team Members
+                </Typography>
                 <Droppable droppableId="defaultDropArea" direction="horizontal">
                   {(provided, snapshot) => (
                     <Box
@@ -241,7 +248,15 @@ const PairingBoard = observer(() => {
               container
               className={styles.board}
               justifyContent="flex-start"
+              position="relative"
             >
+              <Typography
+                variant="subtitle2"
+                fontSize={18}
+                className={styles.boardTitle}
+              >
+                Pairing Board
+              </Typography>
               {pairList.map((pair) => {
                 return (
                   <Grid item>

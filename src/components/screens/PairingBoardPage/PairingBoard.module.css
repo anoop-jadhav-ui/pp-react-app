@@ -21,11 +21,29 @@
 }
 
 .board {
-  border: 8px solid var(--secondary);
-  border-radius: 1rem;
+  border: 8px solid #b99ef6;
+
+  /* border-image: linear-gradient(45deg, var(--primary), var(--secondary)) 1; */
+
+  border-radius: 20px;
   min-height: 600px;
 
   gap: 2rem;
   background-color: white;
   padding: 1rem;
+}
+
+.teamMemberTitle {
+  position: absolute;
+  top: 0.5rem;
+  left: 2rem;
+  padding: 0 1rem;
+  background-color: white;
+}
+.boardTitle {
+  position: absolute;
+  top: -1rem;
+  left: 1rem;
+  padding: 0 1rem;
+  background-color: white;
 }
