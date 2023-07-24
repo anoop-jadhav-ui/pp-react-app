@@ -1,7 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import ShuffleIcon from "@mui/icons-material/Shuffle";
-import { Box, Button, Container, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {
@@ -16,10 +13,10 @@ import {
 } from "../../../store/teamMembersStore";
 import { generateRandomId, getRandomPair } from "../../../utils/commonUtils";
 import { getListStyle } from "../../../utils/dragAndDropUtils";
-import DaySelector from "./DaySelector";
 import DraggableCard from "./DraggableCard";
 import DroppablePair from "./DroppablePair";
 import styles from "./PairingBoard.module.css";
+import PairingBoardHeader from "./PairingBoardHeader";
 
 const PairingBoard = observer(() => {
   const {
@@ -190,49 +187,11 @@ const PairingBoard = observer(() => {
       <Container maxWidth="lg" className={styles.boardWrapper}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Grid container alignItems="center" justifyContent="space-between">
-              <Grid item>
-                <DaySelector />
-              </Grid>
-              <Grid item>
-                <Grid container spacing={2}>
-                  <Grid item>
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      onClick={clearPairingBoard}
-                      startIcon={<HighlightOffIcon />}
-                      disabled={pairList.length === 0}
-                      size="large"
-                    >
-                      Clear Board
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      variant="outlined"
-                      onClick={addRandomPairsToBoard}
-                      disabled={teamMemberPool.length === 0}
-                      startIcon={<ShuffleIcon />}
-                      size="large"
-                    >
-                      Pair Randomly
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      onClick={addPairToBoard}
-                      // disabled={selectedTeamMemberss.length === 0}
-                      startIcon={<AddIcon />}
-                      size="large"
-                    >
-                      Add Pair
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
+            <PairingBoardHeader
+              clearPairingBoard={clearPairingBoard}
+              addPairToBoard={addPairToBoard}
+              addRandomPairsToBoard={addRandomPairsToBoard}
+            />
           </Grid>
           <Grid item xs={12}>
             <Grid
@@ -281,7 +240,7 @@ const PairingBoard = observer(() => {
             <Grid
               container
               className={styles.board}
-              justifyContent="space-evenly"
+              justifyContent="flex-start"
             >
               {pairList.map((pair) => {
                 return (
