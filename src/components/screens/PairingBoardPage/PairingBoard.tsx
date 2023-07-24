@@ -1,7 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
-import { Box, Button, Container, Grid, Stack } from "@mui/material";
+import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {
@@ -66,7 +66,7 @@ const PairingBoard = observer(() => {
           }
           return pair;
         });
-        setPairList(updatedPairList);
+        setPairList(cleanUpPairList(updatedPairList));
         if (draggedTeamMember) {
           setTeamMemberPoolList([...teamMemberPool, draggedTeamMember]);
         }
@@ -86,7 +86,7 @@ const PairingBoard = observer(() => {
         setTeamMemberPoolList(
           teamMemberPool.filter((member) => member.id !== draggedTeamMemberId)
         );
-        setPairList(cleanUpPairList(tempPairList));
+        setPairList(tempPairList);
       } else if (
         sourceId.includes("pairDropArea") &&
         targetId.includes("pairDropArea") &&
@@ -148,6 +148,12 @@ const PairingBoard = observer(() => {
         })
       );
       setSelectedTeamMembers([]);
+    } else {
+      const newPairItem: Pair = {
+        id: generateRandomId(),
+        items: [],
+      };
+      setPairList([...pairList, newPairItem]);
     }
   };
 
@@ -180,77 +186,97 @@ const PairingBoard = observer(() => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Container maxWidth="lg" className={styles.boardWrapper}>
-        <Grid container alignItems="center" spacing={2}>
-          <Grid item xs={10}>
-            <Droppable droppableId="defaultDropArea" direction="horizontal">
-              {(provided, snapshot) => (
-                <Box
-                  ref={provided.innerRef}
-                  padding={4}
-                  className={styles.cardContainer}
-                  gap={4}
-                  style={getListStyle(snapshot.isDraggingOver)}
-                  {...provided.droppableProps}
-                  component="div"
-                >
-                  {teamMemberPool.map((colleague) => {
-                    const isColleagueSelected =
-                      selectedTeamMemberss.findIndex(
-                        (item) => item.name === colleague.name
-                      ) !== -1;
-                    return (
-                      <DraggableCard
-                        key={colleague.id}
-                        title={colleague.name}
-                        index={colleague.id}
-                        selectCard={selectCardForPairing}
-                        isSelected={isColleagueSelected}
-                        color={colleague.color}
-                      />
-                    );
-                  })}
-                  {provided.placeholder}
-                </Box>
-              )}
-            </Droppable>
-          </Grid>
-          <Grid item xs={2}>
-            <Stack spacing={1}>
-              <Button
-                variant="contained"
-                onClick={addPairToBoard}
-                disabled={selectedTeamMemberss.length === 0}
-                startIcon={<AddIcon />}
-              >
-                Add Pair
-              </Button>
-              <Button
-                variant="outlined"
-                onClick={addRandomPairsToBoard}
-                disabled={teamMemberPool.length === 0}
-                startIcon={<ShuffleIcon />}
-              >
-                Pair Randomly
-              </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={clearPairingBoard}
-                startIcon={<HighlightOffIcon />}
-              >
-                Clear Board
-              </Button>
-            </Stack>
-          </Grid>
-        </Grid>
-        <Grid container className={styles.board} justifyContent="space-evenly">
-          {pairList.map((pair) => {
-            return (
-              <Grid item>
-                <DroppablePair key={pair.id} pairItem={pair} index={pair.id} />
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Grid
+              container
+              alignItems="center"
+              spacing={2}
+              justifyContent="space-between"
+            >
+              <Grid item xs={10}>
+                <Droppable droppableId="defaultDropArea" direction="horizontal">
+                  {(provided, snapshot) => (
+                    <Box
+                      ref={provided.innerRef}
+                      padding={4}
+                      className={styles.cardContainer}
+                      gap={4}
+                      style={getListStyle(snapshot.isDraggingOver)}
+                      {...provided.droppableProps}
+                      component="div"
+                    >
+                      {teamMemberPool.map((colleague) => {
+                        const isColleagueSelected =
+                          selectedTeamMemberss.findIndex(
+                            (item) => item.name === colleague.name
+                          ) !== -1;
+                        return (
+                          <DraggableCard
+                            key={colleague.id}
+                            title={colleague.name}
+                            index={colleague.id}
+                            selectCard={selectCardForPairing}
+                            isSelected={isColleagueSelected}
+                            color={colleague.color}
+                          />
+                        );
+                      })}
+                      {provided.placeholder}
+                    </Box>
+                  )}
+                </Droppable>
               </Grid>
-            );
-          })}
+              <Grid item xs={2}>
+                <Stack spacing={1}>
+                  <Button
+                    variant="contained"
+                    onClick={addPairToBoard}
+                    // disabled={selectedTeamMemberss.length === 0}
+                    startIcon={<AddIcon />}
+                  >
+                    Add Pair
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={addRandomPairsToBoard}
+                    disabled={teamMemberPool.length === 0}
+                    startIcon={<ShuffleIcon />}
+                  >
+                    Pair Randomly
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={clearPairingBoard}
+                    startIcon={<HighlightOffIcon />}
+                    disabled={pairList.length === 0}
+                  >
+                    Clear Board
+                  </Button>
+                </Stack>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <Grid
+              container
+              className={styles.board}
+              justifyContent="space-evenly"
+            >
+              {pairList.map((pair) => {
+                return (
+                  <Grid item>
+                    <DroppablePair
+                      key={pair.id}
+                      pairItem={pair}
+                      index={pair.id}
+                    />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </Grid>
         </Grid>
       </Container>
     </DragDropContext>

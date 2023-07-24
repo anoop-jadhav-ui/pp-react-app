@@ -11,16 +11,8 @@
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
 
-  --text: #0f0c18;
-  --background: #ffffff;
-  --primary: #62489d;
-  --secondary: #a9518e;
-  /* --secondary: #edd9e7; */
-  /* --accent: #a9518e; */
-
   --text: #131117;
   --background: #f7f6f8;
   --primary: #8b5cf6;
-  /* --secondary: #d4d0dc; */
   --secondary: #d0f65c;
 }

@@ -195,9 +195,15 @@ function cssColorNameToHex(colorName: string): string {
     return "";
   }
 
-  const r = parseInt(rgbValues[0], 10).toString(16).padStart(2, "0");
-  const g = parseInt(rgbValues[1], 10).toString(16).padStart(2, "0");
-  const b = parseInt(rgbValues[2], 10).toString(16).padStart(2, "0");
+  const r = parseInt(rgbValues[0], 10)
+    .toString(16)
+    .padStart(2, "0");
+  const g = parseInt(rgbValues[1], 10)
+    .toString(16)
+    .padStart(2, "0");
+  const b = parseInt(rgbValues[2], 10)
+    .toString(16)
+    .padStart(2, "0");
 
   return `#${r}${g}${b}`;
 }

@@ -4,7 +4,7 @@
   position: relative;
   padding: 1rem;
 
-  border: 2px solid darkkhaki;
+  border: 2px solid var(--secondary);
   border-radius: 1em;
 
   min-width: calc(2 * var(--card-height) + 3rem);
