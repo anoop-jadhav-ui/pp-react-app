@@ -19,6 +19,7 @@ import { getListStyle } from "../../../utils/dragAndDropUtils";
 import DraggableCard from "./DraggableCard";
 import DroppablePair from "./DroppablePair";
 import styles from "./PairingBoard.module.css";
+import DaySelector from "./DaySelector";
 
 const PairingBoard = observer(() => {
   const {
@@ -181,6 +182,7 @@ const PairingBoard = observer(() => {
 
     setTeamMemberPoolList(tempItems);
     setPairList(tempPairs);
+    setSelectedTeamMembers([]);
   };
 
   return (
@@ -188,13 +190,58 @@ const PairingBoard = observer(() => {
       <Container maxWidth="lg" className={styles.boardWrapper}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
+            <Grid container alignItems="center" justifyContent="space-between">
+              <Grid item>
+                <DaySelector />
+              </Grid>
+              <Grid item>
+                <Grid container spacing={2}>
+                  <Grid item>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={clearPairingBoard}
+                      startIcon={<HighlightOffIcon />}
+                      disabled={pairList.length === 0}
+                      size="large"
+                    >
+                      Clear Board
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="outlined"
+                      onClick={addRandomPairsToBoard}
+                      disabled={teamMemberPool.length === 0}
+                      startIcon={<ShuffleIcon />}
+                      size="large"
+                    >
+                      Pair Randomly
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      onClick={addPairToBoard}
+                      // disabled={selectedTeamMemberss.length === 0}
+                      startIcon={<AddIcon />}
+                      size="large"
+                    >
+                      Add Pair
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
             <Grid
               container
               alignItems="center"
               spacing={2}
               justifyContent="space-between"
             >
-              <Grid item xs={10}>
+              <Grid item xs={12}>
                 <Droppable droppableId="defaultDropArea" direction="horizontal">
                   {(provided, snapshot) => (
                     <Box
@@ -219,6 +266,7 @@ const PairingBoard = observer(() => {
                             selectCard={selectCardForPairing}
                             isSelected={isColleagueSelected}
                             color={colleague.color}
+                            toolTipText="Click to select"
                           />
                         );
                       })}
@@ -226,35 +274,6 @@ const PairingBoard = observer(() => {
                     </Box>
                   )}
                 </Droppable>
-              </Grid>
-              <Grid item xs={2}>
-                <Stack spacing={1}>
-                  <Button
-                    variant="contained"
-                    onClick={addPairToBoard}
-                    // disabled={selectedTeamMemberss.length === 0}
-                    startIcon={<AddIcon />}
-                  >
-                    Add Pair
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    onClick={addRandomPairsToBoard}
-                    disabled={teamMemberPool.length === 0}
-                    startIcon={<ShuffleIcon />}
-                  >
-                    Pair Randomly
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={clearPairingBoard}
-                    startIcon={<HighlightOffIcon />}
-                    disabled={pairList.length === 0}
-                  >
-                    Clear Board
-                  </Button>
-                </Stack>
               </Grid>
             </Grid>
           </Grid>

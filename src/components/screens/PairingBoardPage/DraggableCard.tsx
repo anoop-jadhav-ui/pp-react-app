@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { Draggable } from "react-beautiful-dnd";
 import styles from "./DraggableCard.module.css";
 import {
@@ -12,6 +12,7 @@ interface CardProps {
   selectCard?: (name: string) => void;
   title: string;
   color?: string;
+  toolTipText: string;
 }
 
 const DraggableCard = ({
@@ -20,6 +21,7 @@ const DraggableCard = ({
   selectCard,
   title,
   color = "khaki",
+  toolTipText,
 }: CardProps) => {
   const ccrRatio = calculateContrastRatioHex(
     cssColorNameToHex("black"),
@@ -34,26 +36,28 @@ const DraggableCard = ({
   return (
     <Draggable draggableId={`draggable-${index}`} index={index}>
       {(provided) => (
-        <Box
-          component="div"
-          className={`${styles.card} ${isSelected ? styles.selected : ""}`}
-          ref={provided.innerRef}
-          onClick={() => selectCard?.(title)}
-          {...{
-            ...provided.draggableProps,
-            style: {
-              ...provided.draggableProps.style,
-              background: color,
-              color: textColor,
-            },
-          }}
-          {...provided.dragHandleProps}
-          draggable
-        >
-          <Typography variant="subtitle2" className={styles.cardHeader}>
-            {title}
-          </Typography>
-        </Box>
+        <Tooltip title={toolTipText}>
+          <Box
+            component="div"
+            className={`${styles.card} ${isSelected ? styles.selected : ""}`}
+            ref={provided.innerRef}
+            onClick={() => selectCard?.(title)}
+            {...{
+              ...provided.draggableProps,
+              style: {
+                ...provided.draggableProps.style,
+                background: color,
+                color: textColor,
+              },
+            }}
+            {...provided.dragHandleProps}
+            draggable
+          >
+            <Typography variant="subtitle2" className={styles.cardHeader}>
+              {title}
+            </Typography>
+          </Box>
+        </Tooltip>
       )}
     </Draggable>
   );

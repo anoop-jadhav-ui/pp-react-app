@@ -1,4 +1,4 @@
-import { Container, Grid, TextField } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const DaySelector = () => {
@@ -12,21 +12,19 @@ const DaySelector = () => {
   }, []);
 
   return (
-    <Container maxWidth="lg">
-      <Grid container>
-        <Grid item>
-          <TextField
-            type="date"
-            label="Select Pairing Day"
-            onChange={(e) => setCurrentDate(e.target.value)}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={currentDate}
-          />
-        </Grid>
+    <Grid container>
+      <Grid item>
+        <TextField
+          type="date"
+          label="Select Pairing Day"
+          onChange={(e) => setCurrentDate(e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={currentDate}
+        />
       </Grid>
-    </Container>
+    </Grid>
   );
 };
 
