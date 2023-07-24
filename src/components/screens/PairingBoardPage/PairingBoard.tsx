@@ -1,7 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
-import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Grid } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {
@@ -16,10 +16,10 @@ import {
 } from "../../../store/teamMembersStore";
 import { generateRandomId, getRandomPair } from "../../../utils/commonUtils";
 import { getListStyle } from "../../../utils/dragAndDropUtils";
+import DaySelector from "./DaySelector";
 import DraggableCard from "./DraggableCard";
 import DroppablePair from "./DroppablePair";
 import styles from "./PairingBoard.module.css";
-import DaySelector from "./DaySelector";
 
 const PairingBoard = observer(() => {
   const {
